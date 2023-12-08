@@ -85,22 +85,27 @@
     .fields {
       display: none;
     }
-  
 
-    </style>
+  .btn1{
+    color: white;
+    background-color: rgb(214, 141, 5);
+    border: 1px solid rgb(0, 0, 0);
+  }
+
+</style>
 
 
 <div class="container-fulid containerprof">
 
-  <div class="card radius-15" style="width: 100%;">
+  <div class="card radius-15 border-3 rounded" style="width: 100%;">
     <div class="card-body">
         <div class="card-title">
-          <h2 class="mb-0 text-uppercase text-right"> Vendor Credits </h2>
+          <h2 class="mb-0 text-uppercase text-right mt-2"> Vendor Credits </h2>
         </div>
     </div>
   </div>
   <div>
-  <div class="card radius-15 p-5">
+  <div class="card radius-15 p-5 border-3 rounded">
     <form action="{% url 'create_vendor_credit' %}" class="mt-2 mb-4" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="row">
@@ -109,13 +114,17 @@
         </div>
         <div class="col-md-6">
           <select name="vendor" id="vendor" class="form-control bg-light text-dark">
-            <option value=""></option>
+            <option value="" hidden>Select Vendor</option>
             {% for v in vendor %}
             <option value="{{ v.first_name }} {{ v.last_name }} {{v.id}}">{{ v.first_name }} {{ v.last_name }}</option>
             {% endfor %}
           </select>
-          <a href="" data-toggle="modal" data-target="#newvendor">+ Add New Vendor</a>
+      
         </div>
+        <div class="col-md-1">
+          <a href="" class="btn btn1  btn-warning text-white p-2" data-toggle="modal" data-target="#newvendor" style="font-size: large;margin-left: -20px;">+</a>
+        </div>
+        <div class="col-md-2"></div>
       </div>
 
       <div class="row mt-2 d-none" id="email_row">
@@ -154,196 +163,9 @@
         </div>
       </div>
 
-      <!-- <div class="row mt-2  " id="">
-        <div class="col-md-3 ">
-          <label for="">Deliver To</label>
-        </div>
-        <script>
-          function showFields() {
-            var organizationSelected = document.getElementById("organization").checked;
-            var customerSelected = document.getElementById("customer").checked;
-            
-            var organizationFields = document.getElementById("organizationFields");
-            var customerFields = document.getElementById("customerFields");
-            
-            organizationFields.style.display = organizationSelected ? "block" : "none";
-            customerFields.style.display = customerSelected ? "block" : "none";
-          }
-        </script> -->
-
-        <!-- <div class="col-md-3">
-          <input type="radio"  name="option" value="Organization"  id="organization" onclick="showFields()"> Organization
-        </div>
-        <div class="col-md-3">
-          <input type="radio" name="option" value="Customer" id="customer" onclick="showFields()"> Customer
-        </div>
-      </div>
-
-      <div id="organizationFields" class="fields">
-        <h3>Organization Details:</h3> -->
-<!-- <div class="row">
-  <div class="col-md-3">
-    <label for="orgName">Name:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" id="orgName" class="form-control bg-light text-dark" name="orgName">
-  </div>
-</div>
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="gstNumber">GST Number:</label>
-  
-  </div>        
-  <div class="col-md-6">
-    <input type="text" class="form-control bg-light text-dark" id="gstNumber" name="gstNumber">
-  </div> 
-</div>     
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="orgAddress">E-Mail:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" placeholder="sample@gmail.com" class="form-control bg-light text-dark" id="orgMail" name="orgMail">
-  </div>
-</div>
-<br>
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="orgAddress">Address:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" class="form-control bg-light text-dark" id="orgAddress" name="orgAddress">
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">Streat:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgStreat">
-
-  </div>
-
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">City:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgcity">
-
-  </div>
-
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">State:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgstate">
-
-  </div>
-
-</div>
-
-    </div>
-      
-      <div id="customerFields" class="fields">
-        <h3>Customer Details:</h3>
-        <div class="row mt-2">
-          <div class="col-md-3">
-            <label style="color: rgb(190, 88, 88);">Customer Name *</label><br>
-          </div>
-          <div class="col-md-6">
-            <select name="custom" id="custom" class="form-control bg-light text-dark" >
-              <option value=""></option>
-              {% for c in customer %}
-              <option value="{{ c.customerName }} ">{{ c.customerName }}</option>
-              {% endfor %}
-            </select>
-            <a href="" data-toggle="modal" data-target="#newcustomer">+ Add New Customer</a>
-            <input type="hidden" id="cust_state" value="" readonly >
-  
-            <input type="hidden" id="company_state" value="{{company.state}}" readonly>
-  
-          </div>
-        </div> -->
-
-        <!-- <div class="row">
-          <div class="col-md-3">
-            <label for="custName">Email:</label>
-
-          </div>
-          <div class="col-md-6">
-            <input type="text" id="cemail_inp" class="form-control bg-light text-dark" name="custMail">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">
-            <label for="custAddress">Address:</label>
-
-          </div>
-          <div class="col-md-6">
-            <input class="form-controlbg-light text-dark" type="text" id="custAddress" name="custAddress">
-
-          </div>
-
-        </div>
-        <br>
-        <div class="row">
-          <div class="col-md-3">
-            <label for="custAddress">Streat:</label>
-
-          </div>
-          <div class="col-md-6">
-            <input class="form-controlbg-light text-dark" type="text" id="custstreet" name="custStreet">
-  
-          </div>
-
-        </div>
-<br>
-        <div class="row">
-          <div class="col-md-3">
-            <label for="custAddress">City:</label>
-
-          </div>
-          <div class="col-md-6">
-            <input class="form-controlbg-light text-dark" type="text" id="custcity" name="custcity">
-  
-          </div>
-
-        </div>
-        <br>
-        <div class="row">
-          <div class="col-md-3">
-            <label for="custAddress">State:</label>
-
-          </div>
-          <div class="col-md-6">
-            <input class="form-controlbg-light text-dark" type="text" id="custstate" name="custstate">
-  
-          </div>
-
-        </div> -->
-        
-       
- 
-
-<!-- 
-      </div> -->
 
 
-
-      <div class="row mt-5 mb-5">
+      <div class="row mt-3 mb-2">
         <div class="col-md-3">
           <label>Source of Supply*</label>
         </div>
@@ -414,15 +236,28 @@
           <input type="text" class="form-control text-dark bg-light"  id="order_number" name="order_number" required>
         </div>
       </div>
+      <div class="row mt-3 mb-2">
+        <div class="col-md-3">
+          <label for="order_number" >Bill Number *</label>
+        </div>
 
-      <div class="row mt-2" >
+        <div class="col-md-6">
+         <select id="bill_number" name="bill_number" class="form-select">
+          <option value="" hidden>Select Bill</option>
+          
+
+         </select>
+        </div>
+      </div>
+
+      <div class="row mt-3 mb-2" >
         <div class="col-md-3">
           <label for="date1">Vendor Credit Date</label>
         </div>
         <div class="col-md-3">
           <input type="date" class="form-control text-dark bg-light" id="credit_date" name="credit_date" required>
         </div>
-    </div>
+      </div>
 
 
       
@@ -430,173 +265,40 @@
 
 
   
-      <div class="row mt-2">
+      <div class="row mt-5">
         <div class="col-md-12 table-responsive-md mt-3">
-          <table class="table table-bordered " style="width: 103%;" id="item_table" onclick='toggleDateInput()'>
+          <table class="table table-bordered table-dark"  id="item_table" onclick='toggleDateInput()'>
             <thead>
               <tr>
-                <th>Item<br><a href="" data-toggle="modal" data-target="#newitem" class="text-capitalize">+ Item</a></th>
-                <th class="text-uppercase">account<br><a href="" data-toggle="modal" data-target="#newaccount" class="text-capitalize">+ NEW</a></th>
+                <th>Items<a href="" data-toggle="modal" data-target="#newitem" class="text-capitalize"><span class="text-warning"><i class="fa fa-plus"></i> Item</span></a></th>
+                
                 <th class="text-right">Hsn</th>
                 <th class="text-right">Quantity</th>
                 <th class="text-right">Rate</th>
                 <th class="text-right">Discount</th>
                 <th class="text-right">Tax</th>
                 <th class="text-right">Amount</th>
+                <th class="text-right">Action</th>
+
               </tr>
             </thead>
             <tbody>
               <tr id="row1">
-                  <td style="width: 5%;">
-                      <div ><select
-                              class='form-control bg-light text-dark border-0 item_select itm'
-                              name='item[]' id='item1'>
-                              <option value=" " selected disabled>Select Item</option>
-                              {% for i in item %}
-                                <option value="{{i.Name}}">{{ i.Name  }} </option>
-                              {% endfor %}
-                          </select></div>
-                  </td>
+                <td style="width: 5%;">
+                  <div >
+                    <select class='form-control bg-light text-dark border-0 item_select itm' name='item[]' id='item1'>
+                      <option value=" " selected hidden>Select Item</option>
+                      <!-- {% for i in item %}
+                        <option value="{{i.Name}}">{{ i.Name  }} </option>
+                      {% endfor %} -->
+                    </select>
+                  </div>
+                </td>
                   
-                  <td  style="width: 13%;">
-                    <div class="d-flex">
-                      <select name='account[]' id="account1" class="form-control acnt bg-light text-dark">
-                        <option value=" " selected disabled >Select Account</option>
-                        <optgroup class=""label="Accounts Payable">
-                          <option value='Accounts Payable'>Accounts Payable</option>
-                        </optgroup>
-    
-                        <optgroup class="" label="Accounts Receivable">
-                          <option value='Accounts Receivable'>Accounts Receivable</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Other Current Asset">
-                          <option value='Advance Tax'>Advance Tax</option>
-                          <option value='Employee Advance'>Employee Advance</option>
-                          <option value='Prepaid Expences'>Prepaid Expences</option>
-                          <option value='GST TCS Receivable'>GST TCS Receivable</option>
-                          <option value='GST TDS Receivable'>GST TDS Receivable</option>
-                          <option value='Input Tax Credits'>Input Tax Credits</option>
-                          <option value='Input CGST'>Input CGST</option>
-                          <option value='Input IGST'>Input IGST</option>
-                          <option value='Input SGST'>Input SGST</option>
-                          <option value='Reverse Charge Input Tax but not Due'>Reverse Charge Input Tax but not Due</option>
-                          <option value='Sales to Customers(Cash)'>Sales to Customers(Cash)</option>
-                          <option value='TDS Receivable'>TDS Receivable</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Expence">
-                          <option value='Advertising and Marketing'>Advertising and Marketing</option>
-                          <option value='Automobile Expense'>Automobile Expense</option>
-                          <option value='Bad Debt'>Bad Debt</option>
-                          <option value='Bank Fees and Charges'>Bank Fees and Charges</option>
-                          <option value='Consultant Expense'>Consultant Expense</option>
-                          <option value='Credit Card Expense'>Credit Card Expense</option>
-                          <option value='IT and Internet Expenses'>IT and Internet Expenses</option>
-                          <option value='Janitorial Expences'>Janitorial Expences</option>
-                          <option value='Lodging'>Lodging</option>
-                          <option value='Meals and Entertainment'>Meals and Entertainment</option>
-                          <option value='Office Supplies'>Office Supplies</option>
-                          <option value=0>Other Expenses</option>
-                          <option value='Other Expenses'>Postage</option>
-                          <option value='Printing and Stationery'>Printing and Stationery</option>
-                          <option value='Rent Expense'>Rent Expense</option>
-                          <option value='Repair and Maintenance'>Repair and Maintenance</option>
-                          <option value='Salaries and Employee Wages'>Salaries and Employee Wages</option>
-                          <option value='Telephone Expense'>Telephone Expense</option>
-                          <option value='Travel Expense'>Travel Expense</option>
-                          <option value='Uncategorized'>Uncategorized</option>
-                          <option value='Contract Assets'>Contract Assets</option>
-                          <option value='Depreciation and Amortisation'>Depreciation and Amortisation</option>
-                          <option value='Merchandise'>Merchandise</option>
-                          <option value='Raw Materials and Consumables'>Raw Materials and Consumables</option>
-                          <option value='Transpotaion Expense'>Transpotaion Expense</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Cost of Goods Sold">
-                          <option value='Cost of Goods Sold'>Cost of Goods Sold</option>
-                          <option value='Job Costing'>Job Costing</option>
-                          <option value='Labor'>Labor</option>
-                          <option value='Materials'>Materials</option>
-                          <option value='Subcontractor'>Subcontractor</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Income">
-                          <option value='Discount'>Discount</option>
-                          <option value='General Income'>General Income</option>
-                          <option value='Interest Income'>Interest Income</option>
-                          <option value='Late Fee Income'>Late Fee Income</option>
-                          <option value='Other Charges'>Other Charges</option>
-                          <option value='Sales'>Sales</option>
-                          <option value='Shipping Charge'>Shipping Charge</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Equity">
-                          <option value='Drawings'>Drawings</option>
-                          <option value='Opening Balance Offset'>Opening Balance Offset</option>
-                          <option value="Owner's Equity">Owner's Equity</option>
-                          <option value='Retained Earnings'>Retained Earnings</option>
-                          <option value='Capital Stock'>Capital Stock</option>
-                          <option value='Distributions'>Distributions</option>
-                          <option value='Dividends Paid'>Dividends Paid</option>
-                          <option value='Investments'>Investments</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Other Current Liability">
-                          <option value='Employee Reimbursements'>Employee Reimbursements</option>
-                          <option value='Opening Balance Adjustments'>Opening Balance Adjustments</option>
-                          <option value='Tax Payable'>Tax Payable</option>
-                          <option value='Unearned Revenue'>Unearned Revenue</option>
-                          <option value='GST Payable'>GST Payable</option>
-                          <option value='Output CGST'>Output CGST</option>
-                          <option value='Output IGST'>Output IGST</option>
-                          <option value='Output SGST'>Output SGST</option>
-                          <option value='TDS Payable'>TDS Payable</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Other Expense">
-                          <option value='Exchange Gain or Loss'>Exchange Gain or Loss</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Fixed Asset">
-                          <option value='Furniture and Equipment'>Furniture and Equipment</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Stock">
-                          <option value='Inventory Asset'>Inventory Asset</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Cash">
-                          <option value='Petty Cash'>Petty Cash</option>
-                          <option value='Undeposited Funds'>Undeposited Funds</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Other Liability">
-                          <option value='Tag Adjustments'>Tag Adjustments</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Long Term Liability">
-                          <option value='Construction Loans'>Construction Loans</option>
-                          <option value='Mortgages'>Mortgages</option>
-                        </optgroup>
-  
-                        <optgroup class="" label="Others">
-                          {% for i in account %}
-                            <option value="{{ i.id }}">{{ i.accountName }} </option>
-                          {% endfor %}
-                        </optgroup>
-                        
-                        <hr>
-                        {% for i in account %}
-                            <option value="{{ i.accountName }} ">{{ i.accountName  }} </option>
-                        {% endfor %}
-                      </select>
-                    </div>  
-                  </td>
 
-                  <td style="width: 13%;" class='text-right'><input type='number' id='hsn1'
+                  <td style="width: 13%;" class='text-right'><input type='text' id='hsn1'
                     class=' text-right hsn form-control bg-light text-dark' name='hsn[]'>
-            </td>
+                  </td>
                   <td style="width: 9%;" class='text-right'><input type='number' id='qty1'
                           class=' text-right qty form-control bg-light text-dark' name='quantity[]'
                           value='0'>
@@ -612,7 +314,7 @@
                   <td style="width: 12%;" class='text-right '> <select name='tax[]' id='tax1'
                           class='form-control bg-light text-dark  text-right border-0 tax' onclick="toggleDateInput()">
                           <optgroup class="text-center" label="GST">
-                            <option value="0" selected></option>
+                            
                             <option value="0">0% GST(0%)</option>
                             <option value="3">3.0% GST(3%)</option>
                             <option value="5">5.0% GST(5%)</option>
@@ -637,110 +339,108 @@
                           class=' text-right form-control amount bg-light text-dark' name='amount[]'
                           value='0.00'></td>
                   <td class='text-center'>
-  <button type='button' id='del_btn1'
-          class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
-          style='width:30px'>X</button>
-  <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-row' data-row=1 style='width:30px'><i class="fa fa-clone"></i>
-  </button>
-</td>
+                    <button type='button' id='del_btn1' class='btn btn1 text-white btn-sm btn-outline-warning rounded-circle delete-row' style='width:30px'><i class="fa fa-close"></i></button>
+                    <button type='button' class='btn btn1 text-white btn-sm btn-outline-warning rounded-circle clone-row' data-row=1 style='width:30px'><i class="fa fa-clone"></i>
+                    </button>
+                  </td>
 
- </tr>
-      </tbody>
-    </table>
-    <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30);" id="add-row">Add another line</button>
-  </div>
-</div>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn1 btn-outline-warning text-white mt-2"  id="add-row">Add another line</button>
+       </div>
+      </div>
 
-      <div class="row border-bottom pb-5">
+      <div class="row  mt-4">
         <div class="col-sm-5 d-flex flex-column mt-auto">
 
-            <label for="">Vendors Credit Note</label>
-            <textarea name="customer_note" id="" cols="8" rows="8"
-                placeholder=" Vendor Credit Notes"></textarea>
-        </div>
-        <div class="col-sm-6 " >
-            <table class=" table  text-white" style="background-color: rgba(58, 57, 57, 0.8);">
-                <tr>
-                    <td>Sub Total</td>
-                    <td></td>
-                    <td><input type="number" id="subtotal" name="subtotal" step="any" value="0.00"
-                            class="bg-transparent border-0 text-right subtotal text-white"></td>
-                </tr>
-                <tr style="display: none;" id="tr_igst">
-                    <td>IGST</td>
-                    <td></td>
-                    <td><input type="number" id='igst' name="igst" step="any" value="0.00"
-                            class="form-control bg-transparent border-0 text-right igst  text-white" ></td>
-                </tr>
-                <tr style="display: none;" id="tr_cgst">
-                    <td>CGST</td>
-                    <td></td>
-                    <td><input type="number" id='cgst' name="cgst" step="any" value="0.00"
-                            class="form-control bg-transparent border-0 text-right cgst text-white" ></td>
-                </tr>
-                <tr style="display: none;" id="tr_sgst">
-                    <td>SGST</td>
-                    <td></td>
-                    <td><input type="number" id='sgst' name="sgst" step="any" value="0.00"
-                            class="form-control bg-transparent border-0 text-right sgst  text-white" ></td>
-                </tr>
-                <tr>
-                    <td>Tax Amount</td>
-                    <td></td>
-                    <td><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0.00" 
-                        class="total_taxamount form-control bg-transparent border-0 text-right  text-white"></td>
-                </tr>
-                <!-- <tr>
-                    <td>Shipping Charges</td>
-                    
-                    <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
-                        class="form-control bg-transparent border-0 text-right shipping_charge  "></td>
-                        <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" value="0"> </td>
-                </tr> -->
-                <tr>
-                  <td>Adjustment </td>
-                  
-                  <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
-                      class="form-control bg-transparent border-0 text-right shipping_charge  "></td>
-                      <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" step="any" value="0"> </td>
-              </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td> </td>
-                </tr>
-                <tr>
-                    <th>Total ( &#x20B9; )</th>
-                    <th></th>
-                    <th><input type="number" id="grandtotal" name="grandtotal" step="any" value="0.00" 
-                            class="form-control bg-transparent border-0 text-right grandtotal  text-white"></th>
-                </tr>
-            </table>
-        </div>
-    </div>
+          <label for="">Vendors Credit Note</label>
+          <textarea name="customer_note" id="" cols="8" rows="8"placeholder=" Vendor Credit Notes"></textarea>
 
-    <div class="row py-5 border-bottom">
-        <!-- <div class="col-md-8 d-flex flex-column w-60 text-white">
-            <label for="">Terms & Conditions</label>
-            <textarea name="tearms_conditions" id="" cols="20" rows="5"
-                placeholder=" Enter the terms & conditions of your business to be displayed in your transaction."></textarea>
-        </div> -->
-        <div class="col-md-4 py-5 text-center rounded" style="background-color: rgba(32, 35, 37);">
-            <label class="text-white" for="">Attach File(s) to Purchase</label><br>
+        </div>
+        <div class="col-sm-1 mt-5" ></div>
+        <div class="col-sm-6 mt-5" >
+          <table class="table  text-white table-dark">
+            <tr>
+                <td>Sub Total</td>
+                <td></td>
+                <td>
+                  <input type="number" id="subtotal" name="subtotal" step="any" value="0" class=" form-control bg-transparent border-0 subtotal text-white">
+                </td>
+            </tr>
+            <tr style="display: none;" id="tr_igst">
+                <td>IGST</td>
+                <td></td>
+                <td><input type="number" id='igst' name="igst" step="any" value="0"
+                        class="form-control bg-transparent border-0  igst  text-white" ></td>
+            </tr>
+            <tr style="display: none;" id="tr_cgst">
+                <td>CGST</td>
+                <td></td>
+                <td><input type="number" id='cgst' name="cgst" step="any" value="0"
+                        class="form-control bg-transparent border-0  cgst text-white" ></td>
+            </tr>
+            <tr style="display: none;" id="tr_sgst">
+                <td>SGST</td>
+                <td></td>
+                <td><input type="number" id='sgst' name="sgst" step="any" value="0"
+                        class="form-control bg-transparent border-0 sgst  text-white" ></td>
+            </tr>
+            <tr>
+                <td>Tax Amount</td>
+                <td></td>
+                <td><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0" 
+                    class="total_taxamount form-control bg-transparent border-0   text-white"></td>
+            </tr>
+            <tr>
+                <td>Shipping Charges</td>
+                
+                <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
+                    class="form-control bg-transparent border-0 shipping_charge  ">
+                </td>
+                <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" value="0.00"> </td>
+            </tr>
+            <tr>
+              <td>Adjustment </td>
+              
+              <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
+                  class="form-control bg-transparent border-0 shipping_charge  ">
+              </td>
+              <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" step="any" value="0.00"> </td>
+            </tr>
+            
+            <tr>
+              <th>Total ( &#x20B9; )</th>
+              <th></th>
+              <th><input type="number" id="grandtotal" name="grandtotal" step="any" value="0.00" class="form-control bg-transparent border-0 grandtotal  text-white"></th>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="row py-5 border-bottom">
+        
+        <div class="col-md-5 text-center bg-dark rounded" >
+            <label class="text-white" for="">Attach File(s)</label><br>
 
             
-            <input id="file-upload" class="form-control bg-light text-dark" type="file" name="file">
+            <input id="file-upload" class="form-control bg-light text-dark mb-4" type="file" name="file">
 
 
 
         </div>
-    </div>
-      <div class="row mt-5 mb-3 m-5 ">
+      </div>
+      <div class="row mt-5 mb-3 ">
+
+        <div class="d-grid gap-5 d-md-block">
+          <button class="btn btn1 btn-warning" type="button" style="width: 100px;">Save</button>
+          <button class="btn btn1 btn-warning" type="button" style="width: 100px;">Draft</button>
+          <button class="btn btn1 btn-warning" type="reset"  style="width: 100px;">Cancel</button>
+        </div>
        
     
      
-        <input style="width: 150px;margin-right: 2rem;" type="submit" class="btn btn-success mt-2" value="Save">
-           <input style="width: 150px;margin-right: 2rem;" class="btn btn-danger mt-2" type="reset" value="Cancel">
+        
      
         
        
@@ -980,7 +680,7 @@
                         <option value="{{p.Terms}} {{p.id}}">{{p.Terms}}</option>
                         {% endfor %}
                       </select>                
-                      <a href="#" class="btn btn-outline-secondary py-2 my-1" data-target="#newpayment" data-toggle="modal">+</a>   
+                      <a href="#" class="btn btn1 btn-outline-warning py-2 my-1 ms-2 text-white" data-target="#newpayment" data-toggle="modal">+</a>   
                     </div>
                   </div>       
                 </div>
@@ -1235,11 +935,11 @@
                   <div class="col-md-4"></div>
                   <div class="col-md-4">
                     <div class="d-flex">
-                      <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
+                      <button class="btn btn-outline-warning btn1 save_btn rounded-pill text-grey w-50 my-4 mx-3"
                       type="submit" data-dismiss="modal" id="vendorSave">Submit
                       </button> 
 
-                      <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
+                      <button type="button" class="close btn-outline-warning btn1 btn save_btn rounded-pill text-grey w-50 my-4" 
                         data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">Cancel</span>
                       </button>
@@ -2003,7 +1703,7 @@
                         <option value="{{u.id}}">{{u.unit}}</option>
                         {% endfor %}
                       </select>                
-                      <a href="#" class="btn btn-outline-secondary py-2 my-1" data-target="#newunit" data-toggle="modal">+</a>  
+                      <a href="#" class="btn btn-outline-warning btn1 py-2 my-1 ms-2 text-white" data-target="#newunit" data-toggle="modal">+</a>  
                     </div>
                   </div>
                 </div>
@@ -2170,11 +1870,11 @@
                   <div class="col-md-4"></div>
                   <div class="col-md-4">
                     <div class="d-flex">
-                      <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
+                      <button class="btn btn-outline-warning btn1 save_btn rounded-pill text-grey w-50 my-4 mx-3"
                       type="submit" data-dismiss="modal" id="itemSave">Submit
                       </button> 
 
-                      <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
+                      <button type="button" class="close btn btn-outline-warning btn1 save_btn rounded-pill text-grey w-50 my-4" 
                         data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">Cancel</span>
                       </button>
@@ -2323,74 +2023,133 @@
         $.ajax({
             url: "{% url 'get_vendor_credit_det' %}",
             data: { 
-                fname : na[0],
-                lname : na[1],
-                id : na[2],
-                csrfmiddlewaretoken: '{{ csrf_token }}' 
+              fname : na[0],
+              lname : na[1],
+              id : na[2],
+              csrfmiddlewaretoken: '{{ csrf_token }}' 
             },
             type : 'POST',
             success: function(data) {
-                $("#email_row").removeClass('d-none');
-                $("#email_row").addClass('d-flex');
-                $("#gst_trt_row").removeClass('d-none');
-                $("#gst_trt_row").addClass('d-flex');
-                $("#address_row").removeClass('d-none');
-                $("#address_row").addClass('d-flex');
-                
-                // Check if any input box is empty in the GSTIN row
-                if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
-                    $("#gstin_row").removeClass('d-flex');
-                    $("#gstin_row").addClass('d-none');
-                } else {
-                    $("#gstin_row").removeClass('d-none');
-                    $("#gstin_row").addClass('d-flex');
-                }
+              $("#email_row").removeClass('d-none');
+              $("#email_row").addClass('d-flex');
+              $("#gst_trt_row").removeClass('d-none');
+              $("#gst_trt_row").addClass('d-flex');
+              $("#address_row").removeClass('d-none');
+              $("#address_row").addClass('d-flex');
+              
+              // Check if any input box is empty in the GSTIN row
+              if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
+                  $("#gstin_row").removeClass('d-flex');
+                  $("#gstin_row").addClass('d-none');
+              } else {
+                  $("#gstin_row").removeClass('d-none');
+                  $("#gstin_row").addClass('d-flex');
+              }
 
-                // Check if any input box is empty in the Address row
-                if (!data.baddress) {
-                    $("#address_row").removeClass('d-flex');
-                    $("#address_row").addClass('d-none');
-                } else {
-                    $("#address_row").removeClass('d-none');
-                    $("#address_row").addClass('d-flex');
-                }
+              // Check if any input box is empty in the Address row
+              if (!data.baddress) {
+                  $("#address_row").removeClass('d-flex');
+                  $("#address_row").addClass('d-none');
+              } else {
+                  $("#address_row").removeClass('d-none');
+                  $("#address_row").addClass('d-flex');
+              }
 
-                $('#email_inp').val(" " + data.vendor_email);
-                $('#gst_trt_inp').val(" " + data.gst_treatment);
-                $('#gstin_inp').val(" " + data.gst_number);
-                $('#address_inp').val(" " + data.baddress);
+              $('#email_inp').val(" " + data.vendor_email);
+              $('#gst_trt_inp').val(" " + data.gst_treatment);
+              $('#gstin_inp').val(" " + data.gst_number);
+              $('#address_inp').val(" " + data.baddress);
+
+              //shows billno based on vendor
+              const billSelect = $('#bill_number');
+              billSelect.empty();  // Clear previous options
+
+                // Append the "Select Bill" option with an empty value
+                billSelect.append($('<option >', {
+                    value: '',
+                    text: 'Select bill',
+                    hidden: 'hidden'
+                }));
+              
+
+              if (data.bill_data.length > 0) {
+                $.each(data.bill_data, function (index, bill) {
+                    billSelect.append($('<option>', {
+                        value: bill.id,
+                        text: bill.bill_number
+                    }));
+                });
+              } else {
+                billSelect.append($('<option>', {
+                    text: 'No bills found'
+                }));
+              }
             }
+        });
+    });
+  });
+
+  $(document).ready(function () {
+    // Add an event listener for the change event on the select tag
+    $('#bill_number').on('change', function () {
+        // Get the selected bill number
+        const selectedBillNumber = $(this).val();
+
+        // Make an AJAX request to fetch bill items for the selected bill number
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'get_bill_items' %}",  // URL for fetching bill items
+          data: {
+              'id': selectedBillNumber
+          },
+          success: function (data) {
+            const billSelect = $('#item1');
+            billSelect.empty();  // Clear previous options
+
+            if (data.bill_item_data.length > 0) {
+                $.each(data.bill_item_data, function (index, bill_item_data) {
+                    billSelect.append($('<option>', {
+                        value: bill_item_data,
+                        text: bill_item_data
+                    }));
+                });
+            } else {
+                billSelect.append($('<option>', {
+                    text: 'No items found'
+                }));
+            }
+              
+          }
+            
         });
     });
 });
 
 
+  $(document).ready(function() {
+    $('#custom').change(function() {
+      var name = $("#custom").val();
+      var na = name.split(' ');
+      console.log(name)
+      $.ajax({
+        url: "{% url 'customer_det' %}",
+        data: {
+          name:name,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        type: 'POST',
+        success: function(data) {
+          $("#cemail_inp").val(data.customer_email);
+          $("#custAddress").val(data.adres);
+          $("#custstreet").val(data.streat);
+          $("#custcity").val(data.city);
+          $("#custstate").val(data.state);
+          document.getElementById('company_state').value = data.st
 
-
-$(document).ready(function() {
-  $('#custom').change(function() {
-    var name = $("#custom").val();
-    var na = name.split(' ');
-    console.log(name)
-    $.ajax({
-      url: "{% url 'customer_det' %}",
-      data: {
-        name:name,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-      },
-      type: 'POST',
-      success: function(data) {
-        $("#cemail_inp").val(data.customer_email);
-        $("#custAddress").val(data.adres);
-        $("#custstreet").val(data.streat);
-        $("#custcity").val(data.city);
-        $("#custstate").val(data.state);
-        document.getElementById('company_state').value = data.st
-
-      }
+        }
+      });
     });
   });
-});
 
 
 
@@ -3059,7 +2818,7 @@ function calculateGrandTotal() {
         <td style="width: 9%;">
           <div>
             <select class='form-control bg-light text-dark  border-0 item_select itm' name='item[]' id='item${rowCount}'>
-              <option value=" " selected disabled>Select Item</option>
+              <option value=" " selected hidden>Select Item</option>
               {% for i in item %}
                 <option value="{{i.Name}}">{{ i.Name }}</option>
               {% endfor %}
@@ -3067,144 +2826,9 @@ function calculateGrandTotal() {
           </div>
         </td>
 
-        <td  style="width: 12%;">
-          <div class="d-flex">
-            <select name='account[]' id="account${rowCount}" class="form-control bg-light text-dark acnt">
-              <option value=" " selected disabled >Select Account</option>
-              <optgroup class=""label="Accounts Payable">
-                        <option value='Accounts Payable'>Accounts Payable</option>
-                      </optgroup>
-  
-                      <optgroup class="" label="Accounts Receivable">
-                        <option value='Accounts Receivable'>Accounts Receivable</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Other Current Asset">
-                        <option value='Advance Tax'>Advance Tax</option>
-                        <option value='Employee Advance'>Employee Advance</option>
-                        <option value='Prepaid Expences'>Prepaid Expences</option>
-                        <option value='GST TCS Receivable'>GST TCS Receivable</option>
-                        <option value='GST TDS Receivable'>GST TDS Receivable</option>
-                        <option value='Input Tax Credits'>Input Tax Credits</option>
-                        <option value='Input CGST'>Input CGST</option>
-                        <option value='Input IGST'>Input IGST</option>
-                        <option value='Input SGST'>Input SGST</option>
-                        <option value='Reverse Charge Input Tax but not Due'>Reverse Charge Input Tax but not Due</option>
-                        <option value='Sales to Customers(Cash)'>Sales to Customers(Cash)</option>
-                        <option value='TDS Receivable'>TDS Receivable</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Expence">
-                        <option value='Advertising and Marketing'>Advertising and Marketing</option>
-                        <option value='Automobile Expense'>Automobile Expense</option>
-                        <option value='Bad Debt'>Bad Debt</option>
-                        <option value='Bank Fees and Charges'>Bank Fees and Charges</option>
-                        <option value='Consultant Expense'>Consultant Expense</option>
-                        <option value='Credit Card Expense'>Credit Card Expense</option>
-                        <option value='IT and Internet Expenses'>IT and Internet Expenses</option>
-                        <option value='Janitorial Expences'>Janitorial Expences</option>
-                        <option value='Lodging'>Lodging</option>
-                        <option value='Meals and Entertainment'>Meals and Entertainment</option>
-                        <option value='Office Supplies'>Office Supplies</option>
-                        <option value=0>Other Expenses</option>
-                        <option value='Other Expenses'>Postage</option>
-                        <option value='Printing and Stationery'>Printing and Stationery</option>
-                        <option value='Rent Expense'>Rent Expense</option>
-                        <option value='Repair and Maintenance'>Repair and Maintenance</option>
-                        <option value='Salaries and Employee Wages'>Salaries and Employee Wages</option>
-                        <option value='Telephone Expense'>Telephone Expense</option>
-                        <option value='Travel Expense'>Travel Expense</option>
-                        <option value='Uncategorized'>Uncategorized</option>
-                        <option value='Contract Assets'>Contract Assets</option>
-                        <option value='Depreciation and Amortisation'>Depreciation and Amortisation</option>
-                        <option value='Merchandise'>Merchandise</option>
-                        <option value='Raw Materials and Consumables'>Raw Materials and Consumables</option>
-                        <option value='Transpotaion Expense'>Transpotaion Expense</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Cost of Goods Sold">
-                        <option value='Cost of Goods Sold'>Cost of Goods Sold</option>
-                        <option value='Job Costing'>Job Costing</option>
-                        <option value='Labor'>Labor</option>
-                        <option value='Materials'>Materials</option>
-                        <option value='Subcontractor'>Subcontractor</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Income">
-                        <option value='Discount'>Discount</option>
-                        <option value='General Income'>General Income</option>
-                        <option value='Interest Income'>Interest Income</option>
-                        <option value='Late Fee Income'>Late Fee Income</option>
-                        <option value='Other Charges'>Other Charges</option>
-                        <option value='Sales'>Sales</option>
-                        <option value='Shipping Charge'>Shipping Charge</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Equity">
-                        <option value='Drawings'>Drawings</option>
-                        <option value='Opening Balance Offset'>Opening Balance Offset</option>
-                        <option value="Owner's Equity">Owner's Equity</option>
-                        <option value='Retained Earnings'>Retained Earnings</option>
-                        <option value='Capital Stock'>Capital Stock</option>
-                        <option value='Distributions'>Distributions</option>
-                        <option value='Dividends Paid'>Dividends Paid</option>
-                        <option value='Investments'>Investments</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Other Current Liability">
-                        <option value='Employee Reimbursements'>Employee Reimbursements</option>
-                        <option value='Opening Balance Adjustments'>Opening Balance Adjustments</option>
-                        <option value='Tax Payable'>Tax Payable</option>
-                        <option value='Unearned Revenue'>Unearned Revenue</option>
-                        <option value='GST Payable'>GST Payable</option>
-                        <option value='Output CGST'>Output CGST</option>
-                        <option value='Output IGST'>Output IGST</option>
-                        <option value='Output SGST'>Output SGST</option>
-                        <option value='TDS Payable'>TDS Payable</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Other Expense">
-                        <option value='Exchange Gain or Loss'>Exchange Gain or Loss</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Fixed Asset">
-                        <option value='Furniture and Equipment'>Furniture and Equipment</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Stock">
-                        <option value='Inventory Asset'>Inventory Asset</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Cash">
-                        <option value='Petty Cash'>Petty Cash</option>
-                        <option value='Undeposited Funds'>Undeposited Funds</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Other Liability">
-                        <option value='Tag Adjustments'>Tag Adjustments</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Long Term Liability">
-                        <option value='Construction Loans'>Construction Loans</option>
-                        <option value='Mortgages'>Mortgages</option>
-                      </optgroup>
-
-                      <optgroup class="" label="Others">
-                        {% for i in account %}
-                          <option value="{{ i.id }}">{{ i.accountName }} </option>
-                        {% endfor %}
-                      </optgroup>
-                      
-              <hr>
-              {% for i in account %}
-                <option value="{{ i.accountName }} ">{{ i.accountName }}</option>
-              {% endfor %}
-            </select>
-          </div>  
-        </td>
         
         <td style="width: 14%;" class='text-right'>
-          <input type='number' id='hsn${rowCount}' class='text-right bg-light text-dark hsn form-control' name='hsn[]'>
+          <input type='text' id='hsn${rowCount}' class='text-right bg-light text-dark hsn form-control' name='hsn[]'>
         </td>
 
         
@@ -3246,13 +2870,13 @@ function calculateGrandTotal() {
           <input type="text" name='taxamount' id="taxamount${rowCount}" class="form-control bg-light text-dark taxamount" />
         </td>
         
-        <td style="width: 25%;" class='text-right'>
+        <td style="width: 14%;" class='text-right'>
           <input type='number' id='amount${rowCount}' class='text-right bg-light text-dark form-control amount' name='amount[]' value='0.00'>
         </td>
         
         <td class='text-center'>
-  <button type='button' id='del_btn${rowCount}' class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row' style='width:30px'>X</button>
-  <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-row' data-row='${rowCount}' style='width:30px'><i class="fa fa-clone"></i></button>
+  <button type='button' id='del_btn${rowCount}' class='btn btn1 text-white btn-sm btn-outline-warning rounded-circle delete-row' style='width:30px'><i class="fa fa-close"></i></button>
+  <button type='button' class='btn btn1 text-white btn-sm btn-outline-warning rounded-circle clone-row' data-row='${rowCount}' style='width:30px'><i class="fa fa-clone"></i></button>
 </td>
 
       </tr>
@@ -3535,10 +3159,10 @@ function toggleDateInput() {
 
                   if (data3 == '{{ company.state }}') {
                       document.getElementById('tgst1').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst1').value = data1
+                      // document.getElementById('tgst1').value = data1
                   }
                   document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst1').value = data2
+                  // document.getElementById('tigst1').value = data2
 
               }
           });
@@ -4229,3 +3853,194 @@ function toggleDateInput() {
   });
 </script>
 {% endblock %}
+
+
+
+
+<!-- <div class="row mt-2  " id="">
+  <div class="col-md-3 ">
+    <label for="">Deliver To</label>
+  </div>
+  <script>
+    function showFields() {
+      var organizationSelected = document.getElementById("organization").checked;
+      var customerSelected = document.getElementById("customer").checked;
+      
+      var organizationFields = document.getElementById("organizationFields");
+      var customerFields = document.getElementById("customerFields");
+      
+      organizationFields.style.display = organizationSelected ? "block" : "none";
+      customerFields.style.display = customerSelected ? "block" : "none";
+    }
+  </script> -->
+
+  <!-- <div class="col-md-3">
+    <input type="radio"  name="option" value="Organization"  id="organization" onclick="showFields()"> Organization
+  </div>
+  <div class="col-md-3">
+    <input type="radio" name="option" value="Customer" id="customer" onclick="showFields()"> Customer
+  </div>
+</div>
+
+<div id="organizationFields" class="fields">
+  <h3>Organization Details:</h3> -->
+<!-- <div class="row">
+  <div class="col-md-3">
+    <label for="orgName">Name:</label>
+  
+  </div>       
+  <div class="col-md-6">
+    <input type="text" id="orgName" class="form-control bg-light text-dark" name="orgName">
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-md-3">
+    <label for="gstNumber">GST Number:</label>
+  
+  </div>        
+  <div class="col-md-6">
+    <input type="text" class="form-control bg-light text-dark" id="gstNumber" name="gstNumber">
+  </div> 
+</div>     
+<div class="row mt-2">
+  <div class="col-md-3">
+    <label for="orgAddress">E-Mail:</label>
+  
+  </div>       
+  <div class="col-md-6">
+    <input type="text" placeholder="sample@gmail.com" class="form-control bg-light text-dark" id="orgMail" name="orgMail">
+  </div>
+</div>
+<br>
+<div class="row mt-2">
+  <div class="col-md-3">
+    <label for="orgAddress">Address:</label>
+  
+  </div>       
+  <div class="col-md-6">
+    <input type="text" class="form-control bg-light text-dark" id="orgAddress" name="orgAddress">
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-3">
+    <label for="custAddress">Streat:</label>
+
+  </div>
+  <div class="col-md-6">
+    <input class="form-controlbg-light text-dark" type="text"  name="orgStreat">
+
+  </div>
+
+</div>
+<br>
+<div class="row">
+  <div class="col-md-3">
+    <label for="custAddress">City:</label>
+
+  </div>
+  <div class="col-md-6">
+    <input class="form-controlbg-light text-dark" type="text"  name="orgcity">
+
+  </div>
+
+</div>
+<br>
+<div class="row">
+  <div class="col-md-3">
+    <label for="custAddress">State:</label>
+
+  </div>
+  <div class="col-md-6">
+    <input class="form-controlbg-light text-dark" type="text"  name="orgstate">
+
+  </div>
+
+</div>
+
+</div>
+
+<div id="customerFields" class="fields">
+  <h3>Customer Details:</h3>
+  <div class="row mt-2">
+    <div class="col-md-3">
+      <label style="color: rgb(190, 88, 88);">Customer Name *</label><br>
+    </div>
+    <div class="col-md-6">
+      <select name="custom" id="custom" class="form-control bg-light text-dark" >
+        <option value=""></option>
+        {% for c in customer %}
+        <option value="{{ c.customerName }} ">{{ c.customerName }}</option>
+        {% endfor %}
+      </select>
+      <a href="" data-toggle="modal" data-target="#newcustomer">+ Add New Customer</a>
+      <input type="hidden" id="cust_state" value="" readonly >
+
+      <input type="hidden" id="company_state" value="{{company.state}}" readonly>
+
+    </div>
+  </div> -->
+
+  <!-- <div class="row">
+    <div class="col-md-3">
+      <label for="custName">Email:</label>
+
+    </div>
+    <div class="col-md-6">
+      <input type="text" id="cemail_inp" class="form-control bg-light text-dark" name="custMail">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="custAddress">Address:</label>
+
+    </div>
+    <div class="col-md-6">
+      <input class="form-controlbg-light text-dark" type="text" id="custAddress" name="custAddress">
+
+    </div>
+
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="custAddress">Streat:</label>
+
+    </div>
+    <div class="col-md-6">
+      <input class="form-controlbg-light text-dark" type="text" id="custstreet" name="custStreet">
+
+    </div>
+
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="custAddress">City:</label>
+
+    </div>
+    <div class="col-md-6">
+      <input class="form-controlbg-light text-dark" type="text" id="custcity" name="custcity">
+
+    </div>
+
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="custAddress">State:</label>
+
+    </div>
+    <div class="col-md-6">
+      <input class="form-controlbg-light text-dark" type="text" id="custstate" name="custstate">
+
+    </div>
+
+  </div> -->
+  
+  
+
+
+  <!-- 
+</div> -->
+

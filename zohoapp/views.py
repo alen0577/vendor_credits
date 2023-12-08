@@ -11258,7 +11258,88 @@ def vendor_credits_home(request):
                 'recur_bill' : sorted_recur
             }
     return render(request,'vendor_credits_home.html',context)
+
     
+@login_required(login_url='login')
+def vendor_credits_filter_draft(request):
+
+    company = company_details.objects.get(user = request.user)
+    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id,status='draft').values()
+    
+    for r in recur:
+        vn = r['vendor_name'].split()[1:]
+        r['vend_name'] = " ".join(vn)
+        
+    
+    sorted_recur = sorted(recur, key=lambda r: r['vendor_date'],reverse=True) 
+
+    context = {
+                'company' : company,
+                'recur_bill' : sorted_recur
+            }
+    return render(request,'vendor_credits_filter_draft.html',context)    
+    
+@login_required(login_url='login')
+def vendor_credits_filter_sent(request):
+
+    company = company_details.objects.get(user = request.user)
+    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id,status='sent').values()
+    
+    for r in recur:
+        vn = r['vendor_name'].split()[1:]
+        r['vend_name'] = " ".join(vn)
+        
+
+    sorted_recur = sorted(recur, key=lambda r: r['vendor_date'],reverse=True) 
+
+    context = {
+                'company' : company,
+                'recur_bill' : sorted_recur
+            }
+    return render(request,'vendor_credits_filter_sent.html',context)
+
+@login_required(login_url='login')
+def vendor_credits_sort_name(request):
+
+    company = company_details.objects.get(user = request.user)
+    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id).values()
+    
+    
+    for r in recur:
+        vn = r['vendor_name'].split()[1:]
+        r['vend_name'] = " ".join(vn)
+        
+
+    sorted_recur = sorted(recur, key=lambda r: r['vendor_name']) 
+    
+
+    context = {
+                'company' : company,
+                'recur_bill' : sorted_recur
+            }
+    return render(request,'vendor_credits_sort_name.html',context)
+
+@login_required(login_url='login')
+def vendor_credits_sort_billno(request):
+
+    company = company_details.objects.get(user = request.user)
+    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id).values()
+    
+    
+    for r in recur:
+        vn = r['vendor_name'].split()[1:]
+        r['vend_name'] = " ".join(vn)
+        
+
+    sorted_recur = sorted(recur, key=lambda r: r['order_no']) 
+    
+
+    context = {
+                'company' : company,
+                'recur_bill' : sorted_recur
+            }
+    return render(request,'vendor_credits_sort_billno.html',context)
+   
     
 
 def getitems2(request):
@@ -13278,8 +13359,15 @@ def get_vendor_credit_det(request):
     baddress = vdr.baddress
 
     return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr, 'baddress' : baddress},safe=False)
-    
-    
+
+@login_required(login_url='login')
+def get_bill_items(request):
+    id = request.GET.get('id')
+    items=PurchaseBillItems.objects.filter(purchase_bill=id)
+    bill_item_data=[item.item_name for item in items]
+
+    return JsonResponse({'bill_item_data':bill_item_data},safe=False)    
+   
 @login_required(login_url='login')
 def get_vendor_credit_det1(request):
 

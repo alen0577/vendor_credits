@@ -1107,6 +1107,14 @@ urlpatterns = [
     path('share_loan_account_statement/<int:id>',views.shareLoanAccountStatementToEmail, name='shareLoanAccountStatementToEmail'),
     path('loan_account_statement_pdf/<int:id>',views.loanAccountStatementPdf,name='loanAccountStatementPdf'),
 
+
+    #vendor credit corrections urls 
+    path('vendor_credits_filter_draft',views.vendor_credits_filter_draft,name='vendor_credits_filter_draft'), 
+    path('vendor_credits_filter_sent',views.vendor_credits_filter_sent,name='vendor_credits_filter_sent'), 
+    path('vendor_credits_sort_vendorname',views.vendor_credits_sort_name,name='vendor_credits_sort_name'), 
+    path('vendor_credits_sort_creditno',views.vendor_credits_sort_billno,name='vendor_credits_sort_billno'), 
+    path('get_bill_items', views.get_bill_items, name='get_bill_items'),
+
 # ---------------------------------------------------------end-----------------------------------------------------
     
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
