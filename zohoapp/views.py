@@ -11283,7 +11283,7 @@ def vendor_credits_filter_draft(request):
 def vendor_credits_filter_sent(request):
 
     company = company_details.objects.get(user = request.user)
-    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id,status='sent').values()
+    recur = Vendor_Credits_Bills.objects.filter(user = request.user.id,status='save').values()
     
     for r in recur:
         vn = r['vendor_name'].split()[1:]
@@ -13349,8 +13349,8 @@ def get_vendor_credit_det(request):
 
     company= company_details.objects.get(user = request.user)
 
-    # fname = request.POST.get('fname')
-    # lname = request.POST.get('lname')
+    fname = request.POST.get('fname')
+    lname = request.POST.get('lname')
     id = request.POST.get('id')
     vdr = vendor_table.objects.get(user=company.user_id, id=id)
     vemail = vdr.vendor_email
@@ -13358,7 +13358,11 @@ def get_vendor_credit_det(request):
     gsttr = vdr.gst_treatment
     baddress = vdr.baddress
 
-    return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr, 'baddress' : baddress},safe=False)
+    vname = f"{fname} {lname}"
+    bills=PurchaseBills.objects.filter(vendor_name=vname,user=company.user_id)
+    bill_data = [{'id': bill.id, 'bill_number': bill.bill_no} for bill in bills]
+
+    return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr, 'baddress' : baddress,'bill_data': bill_data},safe=False)
 
 @login_required(login_url='login')
 def get_bill_items(request):
