@@ -62,9 +62,10 @@
     }
 
     .sectionhtml {
-        background-image: url("/static/images/background.avif");
+        /* background-image: url("/static/images/background.avif"); */
         /* min-height: 380px; */
         /* Center and scale the image nicely */
+        background-color: #000000;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -1400,7 +1401,7 @@
                         </button>
 
                         <ul class="navbar-nav">
-                            <div class="search-bar-container" id="search-container">
+                            <div class="search-bar-container mb-4 ms-1" id="search-container">
                                 <input type="text" autocomplete="off" id="myInput" onkeyup="filter(this);"
                                     class="form-control text-dark" placeholder="search..." />
                                 <div class="input-group-append"></div>

@@ -165,51 +165,31 @@
 
 
 
-      <div class="row mt-3 mb-2">
+      <div class="row mt-3 mb-2 d-none" id="sop_row">
         <div class="col-md-3">
           <label>Source of Supply*</label>
         </div>
 
         <div class="col-md-6">
             <select name="srcofsupply" id="srcofsupply" onclick="toggleDateInput()" onselect="calculateTaxAmount()" class="form-control bg-light text-dark">
-                <option value="[AN] Andaman and Nicobar Islads">[AN] Andaman and Nicobar Islads</option>
-                <option value="[AD] Andhra Predhesh">[AD] Andhra Predhesh</option>
-                <option value="[AR] Arunachal Predesh">[AR] Arunachal Predesh</option>
-                <option value="[AS] Assam">[AS] Assam</option>
-                <option value="[BR] Bihar">[BR] Bihar</option>
-                <option value="[CH] Chandigarh">[CH] Chandigarh</option>
-                <option value="[CG] Chhattisgarh">[CG] Chhattisgarh</option>
-                <option value="[DNH] Dadra and Nagar Haveli">[DNH] Dadra and Nagar Haveli</option>
-                <option value="[DD] Damn anad Diu">[DD] Damn anad Diu</option>
-                <option value="[DL] Delhi">[DL] Delhi</option>
-                <option value="[GA] Goa">[GA] Goa</option>
-                <option value="[GJ] Gujarat">[GJ] Gujarat</option>
-                <option value="[HR] Haryana">[HR] Haryana</option>
-                <option value="[HP] Himachal Predesh">[HP] Himachal Predesh</option>
-                <option value="[JK] Jammu and Kashmir">[JK] Jammu and Kashmir</option>
-                <option value="[JH] Jharkhand">[JH] Jharkhand</option>
-                <option value="[KA] Karnataka">[KA] Karnataka</option>
-                <option selected="selected" value="[KL] Kerala">[KL] Kerala</option>
-                <option value="[LA] Ladakh">[LA] Ladakh</option>
-                <option value="[LD] Lakshadweep">[LD] Lakshadweep</option>
-                <option value="[MP] Madhya Predesh">[MP] Madhya Predesh</option>
-                <option value="[MH] Maharashtra">[MH] Maharashtra</option>
-                <option value="[MN] Manipur">[MN] Manipur</option>
-                <option value="[ML] Meghalaya">[ML] Meghalaya</option>
-                <option value="[MZ] Mizoram">[MZ] Mizoram</option>
-                <option value="[NL] Nagaland">[NL] Nagaland</option>
-                <option value="[OD] Odisha">[OD] Odisha</option>
-                <option value="[PY] Puducherry">[PY] Puducherry</option>
-                <option value="[PB] Punjab">[PB] Punjab</option>
-                <option value="[RJ] Rajasthan">[RJ] Rajasthan</option>
-                <option value="[SK] Sikkim">[SK] Sikkim</option>
-                <option value="[TN] Tamil Nadu">[TN] Tamil Nadu</option>
-                <option value="[TS] Telangana">[TS] Telangana</option>
-                <option value="[TR] Tripura">[TR] Tripura</option>
-                <option value="[UP] Uttar Predesh">[UP] Uttar Predesh</option>
-                <option value="[UK] Uttarakhand">[UK] Uttarakhand</option>
-                <option value="[WB] West Bengal">[WB] West Bengal</option>
-                <option value="[OT] Other Territory">[OT] Other Territory</option>
+              <option value="" hidden>Select</option>
+              <option value="[AN]-Andaman And Nicobar Islands">[AN]-Andaman And Nicobar Islands</option> <option value="[AD]-Andhra Pradesh">[AD]-Andhra Pradesh</option>
+              <option value="[AR]-Arunachal Pradesh">[AR]-Arunachal Pradesh	</option> <option value="volvo">[AS]-Assam</option>
+              <option value="[BR]-Bihar">[BR]-Bihar</option> <option value="volvo">[CH]-	Chandhigarh</option><option value="[CG]-Chattisgarh">[CG]-Chattisgarh</option>
+              <option value="[DD]-Daman Diu">[DD]-Daman Diu</option><option value="volvo">[DL]-	Delhi</option><option value="[GA]-Goa">[GA]-Goa</option> <option value="[GJ]-Gujarat">[GJ]-Gujarat</option>
+              <option value="[HR]-Haryana">[HR]-Haryana</option> <option value="[HP]-Himachal Pradesh">[HP]-Himachal Pradesh</option>
+              <option value="[JK]-Jammu And Kashmir">[JK]-Jammu And Kashmir</option><option value="[JH]-Jharkand">[JH]-Jharkand</option>
+              <option value="[KA]-Karnataka">[KA]-Karnataka</option><option value="[KL]-Kerala">[KL]-Kerala</option>
+              <option value="[LA]-Ladakh">[LA]-Ladakh</option><option value="[LD]-Lakshadweep">[LD]-Lakshadweep</option>
+              <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option><option value="[MH]-Maharashtra">[MH]-Maharashtra</option>
+              <option value="[MN]-Manipur">[MN]-Manipur</option>  <option value="[ML]-Meghalaya">[ML]-Meghalaya</option>
+              <option value="[MZ]-Mizoram">[MZ]-Mizoram</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option> <option value="[NL]-Nagaland">[NL]-Nagaland</option>
+              <option value="[OD]-Odisha">[OD]-Odisha</option><option value="[PY]-Puducherry">[PY]-Puducherry</option>
+              <option value="[PB]-Punjab">[PB]-Punjab.</option><option value="[RL]-Rajasthan">[RL]-Rajasthan</option>
+              <option value="[SK]-Sikkim">[SK]-Sikkim</option><option value="[TN]-Tamilnadu">[TN]-Tamilnadu</option>
+              <option value="[TS]-Telenghana">[TS]-Telenghana</option><option value="[TR]-Tripura">[TR]-Tripura</option><option value="[UP]-Uttar Pradesh">[UP]-Uttar Pradesh</option>
+              <option value="[UK]-Utharakhand">[UK]-Utharakhand</option><option value="[WB]-West Bengal">[WB]-West Bengal</option>
+              <option value="[OT]-Other Territory">[OT]-Other Territory</option>
             </select>
             
         </div>
@@ -2005,89 +1985,109 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
-  
-
- 
-
 
   $(document).ready(function() {
     $('#vendor').change(function() {
         var name = $("#vendor").val();
         var na = name.split(' ');
+
         $.ajax({
             url: "{% url 'get_vendor_credit_det' %}",
             data: { 
-              fname : na[0],
-              lname : na[1],
-              id : na[2],
-              csrfmiddlewaretoken: '{{ csrf_token }}' 
+                fname: na[0],
+                lname: na[1],
+                id: na[2],
+                csrfmiddlewaretoken: '{{ csrf_token }}' 
             },
-            type : 'POST',
+            type: 'POST',
             success: function(data) {
-              $("#email_row").removeClass('d-none');
-              $("#email_row").addClass('d-flex');
-              $("#gst_trt_row").removeClass('d-none');
-              $("#gst_trt_row").addClass('d-flex');
-              $("#address_row").removeClass('d-none');
-              $("#address_row").addClass('d-flex');
-              
-              // Check if any input box is empty in the GSTIN row
-              if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
-                  $("#gstin_row").removeClass('d-flex');
-                  $("#gstin_row").addClass('d-none');
-              } else {
-                  $("#gstin_row").removeClass('d-none');
-                  $("#gstin_row").addClass('d-flex');
-              }
+                $("#email_row, #gst_trt_row, #address_row, #sop_row").removeClass('d-none').addClass('d-flex');
 
-              // Check if any input box is empty in the Address row
-              if (!data.baddress) {
-                  $("#address_row").removeClass('d-flex');
-                  $("#address_row").addClass('d-none');
-              } else {
-                  $("#address_row").removeClass('d-none');
-                  $("#address_row").addClass('d-flex');
-              }
+                // Check if any input box is empty in the GSTIN row
+                if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
+                    $("#gstin_row").removeClass('d-flex').addClass('d-none');
+                } else {
+                    $("#gstin_row").removeClass('d-none').addClass('d-flex');
+                }
 
-              $('#email_inp').val(" " + data.vendor_email);
-              $('#gst_trt_inp').val(" " + data.gst_treatment);
-              $('#gstin_inp').val(" " + data.gst_number);
-              $('#address_inp').val(" " + data.baddress);
+                // Check if any input box is empty in the Address row
+                if (!data.baddress) {
+                    $("#address_row").removeClass('d-flex').addClass('d-none');
+                } else {
+                    $("#address_row").removeClass('d-none').addClass('d-flex');
+                }
 
-              //shows billno based on vendor
-              const billSelect = $('#bill_number');
-              const itemSelect = $('#item1');
-              billSelect.empty();  // Clear previous options
-              itemSelect.empty();
+                $('#email_inp').val(" " + data.vendor_email);
+                $('#gst_trt_inp').val(" " + data.gst_treatment);
+                $('#gstin_inp').val(" " + data.gst_number);
+                $('#address_inp').val(" " + data.baddress);
 
-              // Append the "Select Bill" option with an empty value
-              billSelect.append($('<option >', {
-                  value: '',
-                  text: 'Select bill',
-                  hidden: 'hidden'
-              }));
-              itemSelect.append($('<option >', {
-                  value: '',
-                  text: 'Select Item',
-                  hidden: 'hidden'
-              }));
+                const sopSelect = $('#srcofsupply');
+                // sopSelect.empty();
 
-              if (data.bill_data.length > 0) {
-                $.each(data.bill_data, function (index, bill) {
-                    billSelect.append($('<option>', {
-                        value: bill.id,
-                        text: bill.bill_number
-                    }));
-                });
-              } else {
-                billSelect.append($('<option>', {
-                    text: 'No bills found'
+                // Append the "Select" option with an empty value
+                sopSelect.append($('<option>', {
+                    value: '',
+                    text: 'Select',
+                    hidden: 'hidden'
                 }));
-              }
+
+                if (data.sop) {
+                    // Append the SOP option with the received value and text
+                    sopSelect.append($('<option>', {
+                      value: data.sop,
+                      text: data.sop,
+                      hidden: 'hidden'
+                    }));
+
+                    // Set the selected option
+                    sopSelect.val(data.sop);
+                } else {
+                    // Handle the case where SOP is not available
+                    sopSelect.append($('<option>', {
+                        text: 'No SOP found',
+                        disabled: 'disabled',
+                        selected: 'selected'
+                    }));
+                }
+
+                //shows billno based on vendor
+                const billSelect = $('#bill_number');
+                const itemSelect = $('#item1');
+                billSelect.empty();  // Clear previous options
+                itemSelect.empty();
+
+                // Append the "Select Bill" option with an empty value
+                billSelect.append($('<option>', {
+                    value: '',
+                    text: 'Select bill',
+                    hidden: 'hidden'
+                }));
+                itemSelect.append($('<option>', {
+                    value: '',
+                    text: 'Select Item',
+                    hidden: 'hidden'
+                }));
+
+                if (data.bill_data.length > 0) {
+                    $.each(data.bill_data, function (index, bill) {
+                        billSelect.append($('<option>', {
+                            value: bill.id,
+                            text: bill.bill_number
+                        }));
+                    });
+                } else {
+                    billSelect.append($('<option>', {
+                        text: 'No bills found'
+                    }));
+                }
             }
         });
     });
   });
+
+  
+
 
   $(document).ready(function () {
     // Add an event listener for the change event on the select tag
@@ -3132,6 +3132,7 @@ function toggleDateInput() {
 
 </script>
 
+
 <script>
   $(document).ready(function () {
 
@@ -3142,6 +3143,7 @@ function toggleDateInput() {
 
       $(document).on('click', '#item1', function () {
           select = $('#item1').val();
+          billno= $('#bill_number').val();
           customer = $('#customer_sel').val();
           console.log(select);
           console.log(customer);
@@ -3149,8 +3151,10 @@ function toggleDateInput() {
               type: "GET",
               url: "{% url 'itemdata_vendor_credit' %}",
               data: {
-                  id: select,
-                  cust: customer
+                id: select,
+                cust: customer,
+                bill: billno
+
               },
               success: function (response) {
                   console.log(response)
@@ -3161,15 +3165,29 @@ function toggleDateInput() {
                   data3 = response.pos
                   data4=response.place
                   data5 = response.hsn
+                  data6 = response.qty
+                  data7 = response.dis
+                  data8 = response.amt
+
                   document.getElementById('rate1').value = data
                   document.getElementById('hsn1').value = data5
+                  document.getElementById('qty1').value = data6
+                  document.getElementById('discount1').value = data7
+                  document.getElementById('amount1').value = data8
+
+                  var row = $(this).closest('tr');
+                  calculateRowAmount(row);
+                  calculateSubtotal();
+                  calculateGrandTotal();
+                  toggleDateInput();
+                  calculateTaxAmount();
 
                   if (data3 == '{{ company.state }}') {
                       document.getElementById('tgst1').innerHTML = data1 + ' % GST';
-                      // document.getElementById('tgst1').value = data1
+                      document.getElementById('tgst1').value = data1
                   }
                   document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
-                  // document.getElementById('tigst1').value = data2
+                  document.getElementById('tigst1').value = data2
 
               }
           });

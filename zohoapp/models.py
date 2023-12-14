@@ -1181,7 +1181,8 @@ class Vendor_Credits_Bills(models.Model):
     comments = models.CharField(max_length=255,null=True,blank=True)
     status=models.CharField(max_length=100, default='draft', null=True, blank=True)
     
-    
+
+
 class Vendor_Credits_Bills_items_bills (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     company = models.ForeignKey(company_details,on_delete=models.CASCADE,null=True,blank=True)

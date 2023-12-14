@@ -13357,12 +13357,13 @@ def get_vendor_credit_det(request):
     gstnum = vdr.gst_number
     gsttr = vdr.gst_treatment
     baddress = vdr.baddress
+    sop=vdr.source_supply
 
     vname = f"{fname} {lname}"
     bills=PurchaseBills.objects.filter(vendor_name=vname,user=company.user_id)
     bill_data = [{'id': bill.id, 'bill_number': bill.bill_no} for bill in bills]
 
-    return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr, 'baddress' : baddress,'bill_data': bill_data},safe=False)
+    return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr, 'baddress' : baddress,'bill_data': bill_data,'sop':sop},safe=False)
 
 @login_required(login_url='login')
 def get_bill_items(request):
@@ -13977,19 +13978,27 @@ def itemdata_vendor_credit(request):
     cur_user = request.user
     user = User.objects.get(id=cur_user.id)
     company = company_details.objects.get(user=user)
-    print(company.state)
-    id = request.GET.get('id')
     
+    item_name = request.GET.get('id')
+    billno=request.GET.get('bill')
+    print(billno)
 
     
 
-    item = AddItem.objects.get(Name=id, user=user)
-    name=item.Name
-    rate = item.p_price
+    item = PurchaseBillItems.objects.get(purchase_bill=billno,item_name=item_name)
+    print(item)
+    name = item.item_name
+    rate = item.rate
     hsn = item.hsn
+    qty = item.quantity
+    tax = item.tax_percentage
+    dis = item.discount
+    amt = item.amount
     place = company.state
 
-    return JsonResponse({"status": " not", 'place': place, 'rate': rate, 'hsn': hsn})
+
+
+    return JsonResponse({"status": " not", 'place': place, 'rate': rate, 'hsn': hsn, 'qty':qty, 'dis':dis, 'amt':amt,})
     return redirect('/')
     
     
