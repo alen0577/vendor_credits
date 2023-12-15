@@ -162,6 +162,14 @@
           <input type="text" class="form-control bg-light text-dark"  id="address_inp" name="address_inp">
         </div>
       </div>
+      <div class="row mt-2 mb-2 d-none" id="">
+        <div class="col-md-3">
+          <label for="">Company State</label>
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control bg-light text-dark"  id="cstate" name="cstate" value="{{company.state}}">
+        </div>
+      </div>
 
 
 
@@ -179,7 +187,7 @@
               <option value="[DD]-Daman Diu">[DD]-Daman Diu</option><option value="volvo">[DL]-	Delhi</option><option value="[GA]-Goa">[GA]-Goa</option> <option value="[GJ]-Gujarat">[GJ]-Gujarat</option>
               <option value="[HR]-Haryana">[HR]-Haryana</option> <option value="[HP]-Himachal Pradesh">[HP]-Himachal Pradesh</option>
               <option value="[JK]-Jammu And Kashmir">[JK]-Jammu And Kashmir</option><option value="[JH]-Jharkand">[JH]-Jharkand</option>
-              <option value="[KA]-Karnataka">[KA]-Karnataka</option><option value="[KL]-Kerala">[KL]-Kerala</option>
+              <option value="[KA]-Karnataka">[KA]-Karnataka</option><option selected value="[KL]-Kerala">[KL]-Kerala</option>
               <option value="[LA]-Ladakh">[LA]-Ladakh</option><option value="[LD]-Lakshadweep">[LD]-Lakshadweep</option>
               <option value="[MP]-Madhyapradesh">[MP]-Madhyapradesh</option><option value="[MH]-Maharashtra">[MH]-Maharashtra</option>
               <option value="[MN]-Manipur">[MN]-Manipur</option>  <option value="[ML]-Meghalaya">[ML]-Meghalaya</option>
@@ -289,26 +297,27 @@
                           class=' text-right discount bg-light text-dark form-control' name='discount[]'
                           value='0'>
                   </td>
-                  <td style="width: 12%;" class='text-right '> <select name='tax[]' id='tax1'
-                          class='form-control bg-light text-dark  text-right border-0 tax' onclick="toggleDateInput()">
-                          <optgroup class="text-center" label="GST">
-                            
-                            <option value="0">0% GST(0%)</option>
-                            <option value="3">3.0% GST(3%)</option>
-                            <option value="5">5.0% GST(5%)</option>
-                            <option value="12">12.0% GST(12%)</option>
-                            <option value="18">18.0% GST(18%)</option>
-                            <option value="28">28.0% GST(28%)</option>
-                          </optgroup>
-                          <optgroup  class="text-center" label="IGST">
-                            <option value="0">0% IGST(0%)</option>
-                            <option value="3">3.0% IGST(3%)</option>
-                            <option value="5">5.0% IGST(5%)</option>
-                            <option value="12">12.0% IGST(12%)</option>
-                            <option value="18">18.0% IGST(18%)</option>
-                            <option value="28">28.0% IGST(28%)</option>             
-                            </optgroup>
-                      </select></td>
+                  <td style="width: 12%;" class='text-right '> 
+                    <select name='tax[]' id='tax1'class='form-control bg-light text-dark  text-right border-0 tax' onclick="toggleDateInput()">
+                      <option value=""hidden>select</option>
+                      <optgroup class="text-center" label="GST">
+                          
+                        <option value="0">0% GST(0%)</option>
+                        <option value="3">3.0% GST(3%)</option>
+                        <option value="5">5.0% GST(5%)</option>
+                        <option value="12">12.0% GST(12%)</option>
+                        <option value="18">18.0% GST(18%)</option>
+                        <option value="28">28.0% GST(28%)</option>
+                      </optgroup>
+                      <optgroup  class="text-center" label="IGST">
+                        <option value="0">0% IGST(0%)</option>
+                        <option value="3">3.0% IGST(3%)</option>
+                        <option value="5">5.0% IGST(5%)</option>
+                        <option value="12">12.0% IGST(12%)</option>
+                        <option value="18">18.0% IGST(18%)</option>
+                        <option value="28">28.0% IGST(28%)</option>             
+                      </optgroup>
+                    </select></td>
                   <td style="display: none;">
                       <input type="text" name='taxamount' id="taxamount1"
                           class=" taxamount text-dark" />
@@ -2779,6 +2788,7 @@ $(document).ready(function () {
     row.find('.amount').val(rowAmount.toFixed(2));
     row.find('.taxamount').val(taxAmount.toFixed(2));
     
+    
     return rowAmount;
     calculateTaxAmount();
   }
@@ -2811,6 +2821,18 @@ function calculateGrandTotal() {
   $('#total_taxamount').val(totalTaxAmount.toFixed(2));
 }
 
+  
+  // Bind the handleItemChange function to the change event for elements with the class .item_select
+  $('#item_table').on('change', '#item1', function () {
+    var row = $(this).closest('tr');
+    calculateRowAmount(row);
+    calculateSubtotal();
+    calculateGrandTotal();
+    toggleDateInput();
+    calculateTaxAmount();
+  });
+
+  
   $('#item_table').on('change', '.tax', function () {
     var row = $(this).closest('tr');
     calculateRowAmount(row);
@@ -2961,8 +2983,10 @@ $('#item_table').on('click', '.item_select, .acnt, .rate, .qty, .tax, .discount'
 
   var checkbox = document.getElementById("srcofsupply");
   var vale = checkbox.value;
+  var company_state = document.getElementById("cstate");
+  var com_state= company_state.value;
 
-  if (vale === "[KL] Kerala") {
+  if (vale === com_state) {
     taxElement.find('optgroup[label="GST"]').show();
     taxElement.find('optgroup[label="IGST"]').hide();
   } else {
@@ -3006,14 +3030,16 @@ function calculateTaxAmount() {
         var checkbox = document.getElementById("srcofsupply");
         var vale=checkbox.value;
         var srcofsupply = vale; // Replace with the actual value of srcofsupply
-        var companyState = "[KL] Kerala"; // Replace with the actual value of company state
+        var company_state = document.getElementById("cstate");
+        var com_state= company_state.value;
+        
 
         var subtotal = parseFloat(document.getElementById("subtotal").value);
         var shipping = parseFloat(document.getElementById("shipping").value);
         var tax = parseFloat(document.getElementById("total_taxamount").value);
         
         var tax_rate = 0.0; // Default tax rate for IGST
-        if (srcofsupply === companyState) {
+        if (srcofsupply === com_state) {
             tax_rate =tax; // Tax rate for CGST/SGST
         }
 
@@ -3023,7 +3049,7 @@ function calculateTaxAmount() {
         var sgst = 0.00;
         var igst = 0.00;
 
-        if (srcofsupply === companyState) {
+        if (srcofsupply === com_state) {
             cgst = total_taxamount / 2;
             sgst = total_taxamount / 2;
         } else {
@@ -3034,7 +3060,7 @@ function calculateTaxAmount() {
         document.getElementById("sgst").value = sgst.toFixed(2);
         document.getElementById("igst").value = igst.toFixed(2);
 
-        if (srcofsupply === companyState) {
+        if (srcofsupply === com_state) {
             document.getElementById("tr_igst").style.display = "none";
             document.getElementById("tr_cgst").style.display = "";
             document.getElementById("tr_sgst").style.display = "";
@@ -3060,11 +3086,13 @@ function calculateTaxAmount() {
 function toggleDateInput() {
       var checkbox = document.getElementById("srcofsupply");
       var vale=checkbox.value;
+      var company_state = document.getElementById("cstate");
+      var com_state= company_state.value;
       
       for (var i = 1; i <= rowCount; i++) {
         var taxElement = $('#tax' + i);
 
-        if (vale === "[KL] Kerala") {
+        if (vale === com_state) {
             taxElement.find('optgroup[label="GST"]').show();
             taxElement.find('optgroup[label="IGST"]').hide();
         } else {
@@ -3080,12 +3108,14 @@ function toggleDateInput() {
         d = 0;
         var checkbox = document.getElementById("srcofsupply");
         var vale=checkbox.value;
+        var company_state = document.getElementById("cstate");
+        var com_state= company_state.value;
         console.log(pos)
         console.log('state')
         console.log(state)
         console.log('state')
         console.log('----------')
-        if ( vale === "[KL] Kerala") {
+        if ( vale === com_state) {
             console.log(pos);
             console.log(state);
             console.log(taxamount);
@@ -3111,12 +3141,14 @@ function toggleDateInput() {
         }
         var checkbox = document.getElementById("srcofsupply");
         var vale=checkbox.value;
-        var pos= "[KL] Kerala"
-        if (vale==pos){
+        var company_state = document.getElementById("cstate");
+        var com_state= company_state.value;
+        var pos= "[KL]-Kerala"
+        if (vale==com_state){
 
         }
 
-        if (vale !=  "[KL] Kerala") {
+        if (vale !=  com_state) {
             console.log(pos);
             console.log(state);
             document.getElementById('tr_cgst').style=('display: none');
@@ -3139,6 +3171,53 @@ function toggleDateInput() {
 
       var roinc = 0
       console.log("ajax");
+      // Function to calculate the row amount
+      function calculateRowAmount(row) {
+        var qty = parseFloat(row.find('.qty').val());
+        var rate = parseFloat(row.find('.rate').val());
+        var tax = parseFloat(row.find('.tax').val());
+        var discount = parseFloat(row.find('.discount').val());
+
+        var rowAmount = (qty * rate) - discount;
+        var taxAmount = (rowAmount * tax) / 100;
+
+        row.find('.amount').val(rowAmount.toFixed(2));
+        row.find('.taxamount').val(taxAmount.toFixed(2));
+        
+        
+        return rowAmount;
+        calculateTaxAmount();
+      }
+
+      // Function to calculate the subtotal
+      function calculateSubtotal() {
+        var subtotal = 0;
+        $('#item_table tbody tr').each(function () {
+          subtotal += calculateRowAmount($(this));
+        });
+        $('#subtotal').val(subtotal.toFixed(2));
+      }
+
+      // Function to calculate the grand total
+      function calculateGrandTotal() {
+        var grandTotal = 0;
+        var totalTaxAmount = 0;
+
+        $('#item_table tbody tr').each(function () {
+          var rowAmount = calculateRowAmount($(this));
+          grandTotal += rowAmount;
+          var taxAmount = parseFloat($(this).find('.taxamount').val());
+          grandTotal += taxAmount;
+          totalTaxAmount += taxAmount;
+        });
+        var shippingCharges = parseFloat($('#shipping').val());
+        grandTotal += shippingCharges;
+
+        $('#grandtotal').val(grandTotal.toFixed(2));
+        $('#total_taxamount').val(totalTaxAmount.toFixed(2));
+      }
+
+      
       // var place = document.getElementById('pos').value;
 
       $(document).on('click', '#item1', function () {
@@ -3168,26 +3247,46 @@ function toggleDateInput() {
                   data6 = response.qty
                   data7 = response.dis
                   data8 = response.amt
+                  data9 = response.tax
 
                   document.getElementById('rate1').value = data
                   document.getElementById('hsn1').value = data5
                   document.getElementById('qty1').value = data6
                   document.getElementById('discount1').value = data7
-                  document.getElementById('amount1').value = data8
+                  // document.getElementById('amount1').value = data8
 
+                  var checkbox = document.getElementById("srcofsupply");
+                  var vale=checkbox.value;
+                  var company_state = document.getElementById("cstate");
+                  var com_state= company_state.value;
+                  const taxSelect = $('#tax1');
+
+                  taxSelect.append($('<option>', {
+                    value: response.tax,
+                    text: response.tax,
+                    hidden: 'hidden'
+                  }));
+
+                  // Set the selected option
+                  taxSelect.val(response.tax);
+                  // Bind the handleItemChange function to the change event for elements with the class .item_select
+                  
                   var row = $(this).closest('tr');
                   calculateRowAmount(row);
                   calculateSubtotal();
                   calculateGrandTotal();
                   toggleDateInput();
                   calculateTaxAmount();
+                  
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst1').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst1').value = data1
-                  }
-                  document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst1').value = data2
+                  
+
+                  // if (data3 == '{{ company.state }}') {
+                  //     document.getElementById('tgst1').innerHTML = data1 + ' % GST';
+                  //     document.getElementById('tgst1').value = data1
+                  // }
+                  // document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
+                  // document.getElementById('tigst1').value = data2
 
               }
           });
@@ -3877,195 +3976,13 @@ function toggleDateInput() {
 
   });
 </script>
+
+
+
+
 {% endblock %}
 
 
 
 
-<!-- <div class="row mt-2  " id="">
-  <div class="col-md-3 ">
-    <label for="">Deliver To</label>
-  </div>
-  <script>
-    function showFields() {
-      var organizationSelected = document.getElementById("organization").checked;
-      var customerSelected = document.getElementById("customer").checked;
-      
-      var organizationFields = document.getElementById("organizationFields");
-      var customerFields = document.getElementById("customerFields");
-      
-      organizationFields.style.display = organizationSelected ? "block" : "none";
-      customerFields.style.display = customerSelected ? "block" : "none";
-    }
-  </script> -->
-
-  <!-- <div class="col-md-3">
-    <input type="radio"  name="option" value="Organization"  id="organization" onclick="showFields()"> Organization
-  </div>
-  <div class="col-md-3">
-    <input type="radio" name="option" value="Customer" id="customer" onclick="showFields()"> Customer
-  </div>
-</div>
-
-<div id="organizationFields" class="fields">
-  <h3>Organization Details:</h3> -->
-<!-- <div class="row">
-  <div class="col-md-3">
-    <label for="orgName">Name:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" id="orgName" class="form-control bg-light text-dark" name="orgName">
-  </div>
-</div>
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="gstNumber">GST Number:</label>
-  
-  </div>        
-  <div class="col-md-6">
-    <input type="text" class="form-control bg-light text-dark" id="gstNumber" name="gstNumber">
-  </div> 
-</div>     
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="orgAddress">E-Mail:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" placeholder="sample@gmail.com" class="form-control bg-light text-dark" id="orgMail" name="orgMail">
-  </div>
-</div>
-<br>
-<div class="row mt-2">
-  <div class="col-md-3">
-    <label for="orgAddress">Address:</label>
-  
-  </div>       
-  <div class="col-md-6">
-    <input type="text" class="form-control bg-light text-dark" id="orgAddress" name="orgAddress">
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">Streat:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgStreat">
-
-  </div>
-
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">City:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgcity">
-
-  </div>
-
-</div>
-<br>
-<div class="row">
-  <div class="col-md-3">
-    <label for="custAddress">State:</label>
-
-  </div>
-  <div class="col-md-6">
-    <input class="form-controlbg-light text-dark" type="text"  name="orgstate">
-
-  </div>
-
-</div>
-
-</div>
-
-<div id="customerFields" class="fields">
-  <h3>Customer Details:</h3>
-  <div class="row mt-2">
-    <div class="col-md-3">
-      <label style="color: rgb(190, 88, 88);">Customer Name *</label><br>
-    </div>
-    <div class="col-md-6">
-      <select name="custom" id="custom" class="form-control bg-light text-dark" >
-        <option value=""></option>
-        {% for c in customer %}
-        <option value="{{ c.customerName }} ">{{ c.customerName }}</option>
-        {% endfor %}
-      </select>
-      <a href="" data-toggle="modal" data-target="#newcustomer">+ Add New Customer</a>
-      <input type="hidden" id="cust_state" value="" readonly >
-
-      <input type="hidden" id="company_state" value="{{company.state}}" readonly>
-
-    </div>
-  </div> -->
-
-  <!-- <div class="row">
-    <div class="col-md-3">
-      <label for="custName">Email:</label>
-
-    </div>
-    <div class="col-md-6">
-      <input type="text" id="cemail_inp" class="form-control bg-light text-dark" name="custMail">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-3">
-      <label for="custAddress">Address:</label>
-
-    </div>
-    <div class="col-md-6">
-      <input class="form-controlbg-light text-dark" type="text" id="custAddress" name="custAddress">
-
-    </div>
-
-  </div>
-  <br>
-  <div class="row">
-    <div class="col-md-3">
-      <label for="custAddress">Streat:</label>
-
-    </div>
-    <div class="col-md-6">
-      <input class="form-controlbg-light text-dark" type="text" id="custstreet" name="custStreet">
-
-    </div>
-
-  </div>
-  <br>
-  <div class="row">
-    <div class="col-md-3">
-      <label for="custAddress">City:</label>
-
-    </div>
-    <div class="col-md-6">
-      <input class="form-controlbg-light text-dark" type="text" id="custcity" name="custcity">
-
-    </div>
-
-  </div>
-  <br>
-  <div class="row">
-    <div class="col-md-3">
-      <label for="custAddress">State:</label>
-
-    </div>
-    <div class="col-md-6">
-      <input class="form-controlbg-light text-dark" type="text" id="custstate" name="custstate">
-
-    </div>
-
-  </div> -->
-  
-  
-
-
-  <!-- 
-</div> -->
 

@@ -13358,7 +13358,7 @@ def get_vendor_credit_det(request):
     gsttr = vdr.gst_treatment
     baddress = vdr.baddress
     sop=vdr.source_supply
-
+    
     vname = f"{fname} {lname}"
     bills=PurchaseBills.objects.filter(vendor_name=vname,user=company.user_id)
     bill_data = [{'id': bill.id, 'bill_number': bill.bill_no} for bill in bills]
@@ -13978,15 +13978,11 @@ def itemdata_vendor_credit(request):
     cur_user = request.user
     user = User.objects.get(id=cur_user.id)
     company = company_details.objects.get(user=user)
-    
     item_name = request.GET.get('id')
     billno=request.GET.get('bill')
-    print(billno)
-
-    
-
+   
     item = PurchaseBillItems.objects.get(purchase_bill=billno,item_name=item_name)
-    print(item)
+    
     name = item.item_name
     rate = item.rate
     hsn = item.hsn
@@ -13995,10 +13991,9 @@ def itemdata_vendor_credit(request):
     dis = item.discount
     amt = item.amount
     place = company.state
+    tax= item.tax_percentage
 
-
-
-    return JsonResponse({"status": " not", 'place': place, 'rate': rate, 'hsn': hsn, 'qty':qty, 'dis':dis, 'amt':amt,})
+    return JsonResponse({"status": " not", 'place': place, 'rate': rate, 'hsn': hsn, 'qty':qty, 'dis':dis, 'amt':amt,'tax':tax})
     return redirect('/')
     
     
