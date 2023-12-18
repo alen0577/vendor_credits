@@ -285,9 +285,9 @@
                   <td style="width: 13%;" class='text-right'><input type='text' id='hsn1'
                     class=' text-right hsn form-control bg-light text-dark' name='hsn[]'>
                   </td>
-                  <td style="width: 9%;" class='text-right'><input type='number' id='qty1'
-                          class=' text-right qty form-control bg-light text-dark' name='quantity[]'
-                          value='0'>
+                  <td style="width: 9%;" class='text-right'>
+                    <input type='number' id='qty1' class=' text-right qty form-control bg-light text-dark' name='quantity[]' value='0'>
+                    
                   </td>
                   <td style="width: 10%;" class='text-right'><input type='number' id='rate1'
                           class=' text-right rate form-control bg-light text-dark' name='rate[]'
@@ -358,25 +358,25 @@
             <tr style="display: none;" id="tr_igst">
                 <td>IGST</td>
                 <td></td>
-                <td><input type="number" id='igst' name="igst" step="any" value="0"
+                <td><input type="number" id='igst' name="igst" step="any" value="0.00"
                         class="form-control bg-transparent border-0  igst  text-white" ></td>
             </tr>
             <tr style="display: none;" id="tr_cgst">
                 <td>CGST</td>
                 <td></td>
-                <td><input type="number" id='cgst' name="cgst" step="any" value="0"
+                <td><input type="number" id='cgst' name="cgst" step="any" value="0.00"
                         class="form-control bg-transparent border-0  cgst text-white" ></td>
             </tr>
             <tr style="display: none;" id="tr_sgst">
                 <td>SGST</td>
                 <td></td>
-                <td><input type="number" id='sgst' name="sgst" step="any" value="0"
+                <td><input type="number" id='sgst' name="sgst" step="any" value="0.00"
                         class="form-control bg-transparent border-0 sgst  text-white" ></td>
             </tr>
             <tr>
                 <td>Tax Amount</td>
                 <td></td>
-                <td><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0" 
+                <td><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0.00" 
                     class="total_taxamount form-control bg-transparent border-0   text-white"></td>
             </tr>
             <tr>
@@ -390,10 +390,10 @@
             <tr>
               <td>Adjustment </td>
               
-              <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
-                  class="form-control bg-transparent border-0 shipping_charge  ">
+              <td><input type="hidden" id="adjustment_amount" name="shipping_charge" step="any" value="0.00" 
+                  class="form-control bg-transparent border-0">
               </td>
-              <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" step="any" value="0.00"> </td>
+              <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="adjustment" name="adjustment" step="any" value="0.00"> </td>
             </tr>
             
             <tr>
@@ -2001,146 +2001,121 @@
         var na = name.split(' ');
 
         $.ajax({
-            url: "{% url 'get_vendor_credit_det' %}",
-            data: { 
-                fname: na[0],
-                lname: na[1],
-                id: na[2],
-                csrfmiddlewaretoken: '{{ csrf_token }}' 
-            },
-            type: 'POST',
-            success: function(data) {
-                $("#email_row, #gst_trt_row, #address_row, #sop_row").removeClass('d-none').addClass('d-flex');
-
-                // Check if any input box is empty in the GSTIN row
-                if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
-                    $("#gstin_row").removeClass('d-flex').addClass('d-none');
-                } else {
-                    $("#gstin_row").removeClass('d-none').addClass('d-flex');
-                }
-
-                // Check if any input box is empty in the Address row
-                if (!data.baddress) {
-                    $("#address_row").removeClass('d-flex').addClass('d-none');
-                } else {
-                    $("#address_row").removeClass('d-none').addClass('d-flex');
-                }
-
-                $('#email_inp').val(" " + data.vendor_email);
-                $('#gst_trt_inp').val(" " + data.gst_treatment);
-                $('#gstin_inp').val(" " + data.gst_number);
-                $('#address_inp').val(" " + data.baddress);
-
-                const sopSelect = $('#srcofsupply');
-                // sopSelect.empty();
-
-                // Append the "Select" option with an empty value
-                sopSelect.append($('<option>', {
-                    value: '',
-                    text: 'Select',
-                    hidden: 'hidden'
-                }));
-
-                if (data.sop) {
-                    // Append the SOP option with the received value and text
-                    sopSelect.append($('<option>', {
-                      value: data.sop,
-                      text: data.sop,
-                      hidden: 'hidden'
-                    }));
-
-                    // Set the selected option
-                    sopSelect.val(data.sop);
-                } else {
-                    // Handle the case where SOP is not available
-                    sopSelect.append($('<option>', {
-                        text: 'No SOP found',
-                        disabled: 'disabled',
-                        selected: 'selected'
-                    }));
-                }
-
-                //shows billno based on vendor
-                const billSelect = $('#bill_number');
-                const itemSelect = $('#item1');
-                billSelect.empty();  // Clear previous options
-                itemSelect.empty();
-
-                // Append the "Select Bill" option with an empty value
-                billSelect.append($('<option>', {
-                    value: '',
-                    text: 'Select bill',
-                    hidden: 'hidden'
-                }));
-                itemSelect.append($('<option>', {
-                    value: '',
-                    text: 'Select Item',
-                    hidden: 'hidden'
-                }));
-
-                if (data.bill_data.length > 0) {
-                    $.each(data.bill_data, function (index, bill) {
-                        billSelect.append($('<option>', {
-                            value: bill.id,
-                            text: bill.bill_number
-                        }));
-                    });
-                } else {
-                    billSelect.append($('<option>', {
-                        text: 'No bills found'
-                    }));
-                }
-            }
-        });
-    });
-  });
-
-  
-
-
-  $(document).ready(function () {
-    // Add an event listener for the change event on the select tag
-    $('#bill_number').on('change', function () {
-        // Get the selected bill number
-        const selectedBillNumber = $(this).val();
-
-        // Make an AJAX request to fetch bill items for the selected bill number
-        $.ajax({
-          type: 'GET',
-          url: "{% url 'get_bill_items' %}",  // URL for fetching bill items
-          data: {
-              'id': selectedBillNumber
+          url: "{% url 'get_vendor_credit_det' %}",
+          data: { 
+              fname: na[0],
+              lname: na[1],
+              id: na[2],
+              csrfmiddlewaretoken: '{{ csrf_token }}' 
           },
-          success: function (data) {
-            const billSelect = $('#item1');
-            billSelect.empty();  // Clear previous options
+          type: 'POST',
+          success: function(data) {
+            $("#email_row, #gst_trt_row, #address_row, #sop_row").removeClass('d-none').addClass('d-flex');
 
-            // Append the "Select Bill" option with an empty value
-            billSelect.append($('<option >', {
-              value: '',
-              text: 'Select Item',
-              hidden: 'hidden'
+            // Check if any input box is empty in the GSTIN row
+            if (!data.gst_number || !data.vendor_email || !data.gst_treatment) {
+                $("#gstin_row").removeClass('d-flex').addClass('d-none');
+            } else {
+                $("#gstin_row").removeClass('d-none').addClass('d-flex');
+            }
+
+            // Check if any input box is empty in the Address row
+            if (!data.baddress) {
+                $("#address_row").removeClass('d-flex').addClass('d-none');
+            } else {
+                $("#address_row").removeClass('d-none').addClass('d-flex');
+            }
+
+            $('#email_inp').val(" " + data.vendor_email);
+            $('#gst_trt_inp').val(" " + data.gst_treatment);
+            $('#gstin_inp').val(" " + data.gst_number);
+            $('#address_inp').val(" " + data.baddress);
+
+            const sopSelect = $('#srcofsupply');
+            // sopSelect.empty();
+
+            // Append the "Select" option with an empty value
+            sopSelect.append($('<option>', {
+                value: '',
+                text: 'Select',
+                hidden: 'hidden'
             }));
 
-            if (data.bill_item_data.length > 0) {
-                $.each(data.bill_item_data, function (index, bill_item_data) {
+            if (data.sop) {
+                // Append the SOP option with the received value and text
+                sopSelect.append($('<option>', {
+                  value: data.sop,
+                  text: data.sop,
+                  hidden: 'hidden'
+                }));
+
+                // Set the selected option
+                sopSelect.val(data.sop);
+            } else {
+                // Handle the case where SOP is not available
+                sopSelect.append($('<option>', {
+                    text: 'No SOP found',
+                    disabled: 'disabled',
+                    selected: 'selected'
+                }));
+            }
+
+            //shows billno based on vendor
+            const billSelect = $('#bill_number');
+            const itemSelect = $('#item1');
+            billSelect.empty();  // Clear previous options
+            itemSelect.empty();
+
+            // Append the "Select Bill" option with an empty value
+            billSelect.append($('<option>', {
+                value: '',
+                text: 'Select bill',
+                hidden: 'hidden'
+            }));
+            itemSelect.append($('<option>', {
+                value: '',
+                text: 'Select Item',
+                hidden: 'hidden'
+            }));
+
+            if (data.bill_data.length > 0) {
+                $.each(data.bill_data, function (index, bill) {
                     billSelect.append($('<option>', {
-                        value: bill_item_data,
-                        text: bill_item_data
+                        value: bill.id,
+                        text: bill.bill_number
                     }));
                 });
             } else {
                 billSelect.append($('<option>', {
-                    text: 'No items found'
+                    text: 'No bills found'
                 }));
             }
-              
-          }
-            
-        });
-    });
-});
+            // Clear data in the default row
+            $('#hsn1').val('');
+            $('#qty1').val('0');
+            $('#rate1').val('0');
+            $('#discount1').val('0');
+            $('#tax1').val('');
+            $('#taxamount1').val('');
+            $('#amount1').val('0.00');
 
+            $('#subtotal').val('0.00');
+            $('#igst').val('0.00');
+            $('#cgst').val('0.00');
+            $('#sgst').val('0.00');
+            $('#total_taxamount').val('0.00');
+            $('#shipping').val('0.00');
+            $('#adjustment').val('0.00');
+            $('#grandtotal').val('0.00');
+
+            // Delete any appended rows
+            $('#item_table tbody tr[id^="row"]').not('#row1').remove();
+          }
+      });
+    });
+  });
+
+  
 
   $(document).ready(function() {
     $('#custom').change(function() {
@@ -2347,7 +2322,7 @@
       document.getElementById('csfax').value = '';
     }
   }
-//------customer create 
+  //------customer create 
 
 $(document).on("click","#customersave",function(){
   if ($('input[name="radioCust"]:checked').val() == 'Business'){
@@ -2816,6 +2791,8 @@ function calculateGrandTotal() {
   });
   var shippingCharges = parseFloat($('#shipping').val());
   grandTotal += shippingCharges;
+  var adjustments = parseFloat($('#adjustment').val());
+  grandTotal += adjustments;
 
   $('#grandtotal').val(grandTotal.toFixed(2));
   $('#total_taxamount').val(totalTaxAmount.toFixed(2));
@@ -2839,6 +2816,77 @@ function calculateGrandTotal() {
     calculateSubtotal();
     calculateGrandTotal();
   });
+  $('#item_table').on('change', '.adjustment', function () {
+    var row = $(this).closest('tr');
+    calculateRowAmount(row);
+    calculateSubtotal();
+    calculateGrandTotal();
+  });
+
+  // Function to fetch and populate items based on bill number
+  function populateItems(billNumber, itemSelect) {
+    // Make an AJAX request to fetch bill items for the selected bill number
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'get_bill_items' %}",  // URL for fetching bill items
+        data: {
+            'id': billNumber
+        },
+        success: function (data) {
+            itemSelect.empty();  // Clear previous options
+
+            // Append the "Select Item" option with an empty value
+            itemSelect.append($('<option>', {
+                value: '',
+                text: 'Select Item',
+                hidden: 'hidden'
+            }));
+
+            if (data.bill_item_data.length > 0) {
+                $.each(data.bill_item_data, function (index, bill_item_data) {
+                    itemSelect.append($('<option>', {
+                        value: bill_item_data,
+                        text: bill_item_data
+                    }));
+                });
+            } else {
+                itemSelect.append($('<option>', {
+                    text: 'No items found'
+                }));
+            }
+        }
+    });
+  }
+
+  // Add an event listener for the change event on the select tag with id 'bill_number'
+  $('#bill_number').on('change', function () {
+    // Get the selected bill number
+    const selectedBillNumber = $(this).val();
+
+    // Call the populateItems function for the default row (item1)
+    populateItems(selectedBillNumber, $('#item1'));
+
+    // Clear data in the default row
+    $('#hsn1').val('');
+    $('#qty1').val('0');
+    $('#rate1').val('0');
+    $('#discount1').val('0');
+    $('#tax1').val('');
+    $('#taxamount1').val('');
+    $('#amount1').val('0.00');
+
+    $('#subtotal').val('0.00');
+    $('#igst').val('0.00');
+    $('#cgst').val('0.00');
+    $('#sgst').val('0.00');
+    $('#total_taxamount').val('0.00');
+    $('#shipping').val('0.00');
+    $('#adjustment').val('0.00');
+    $('#grandtotal').val('0.00');
+
+    // Delete any appended rows
+    $('#item_table tbody tr[id^="row"]').not('#row1').remove();
+  });
 
   $('#add-row').click(function () {
     rowCount++; // Increment row counter
@@ -2848,9 +2896,7 @@ function calculateGrandTotal() {
           <div>
             <select class='form-control bg-light text-dark  border-0 item_select itm' name='item[]' id='item${rowCount}'>
               <option value=" " selected hidden>Select Item</option>
-              {% for i in item %}
-                <option value="{{i.Name}}">{{ i.Name }}</option>
-              {% endfor %}
+             
             </select>
           </div>
         </td>
@@ -2875,23 +2921,24 @@ function calculateGrandTotal() {
         
         <td style="width: 14%;" class='text-right'>
           <select name='tax[]'  id='tax${rowCount}' class='form-control bg-light text-dark text-right border-0 tax' onclick=' toggleDateInput()'>
+            <option value="">Select</option>
             <optgroup class="text-center" label="GST">
-                            <option value="0">0% GST(0%)</option>
-                            <option value="3">3.0% GST(3%)</option>
-                            <option value="5">5.0% GST(5%)</option>
-                            <option value="12">12.0% GST(12%)</option>
-                            <option value="18">18.0% GST(18%)</option>
-                            <option value="28">28.0% GST(28%)</option>
-                          </optgroup>
-                          <optgroup  class="text-center" label="IGST">
-                           
-                            <option value="0">0% IGST(0%)</option>
-                            <option value="3">3.0% IGST(3%)</option>
-                            <option value="5">5.0% IGST(5%)</option>
-                            <option value="12">12.0% IGST(12%)</option>
-                            <option value="18">18.0% IGST(18%)</option>
-                            <option value="28">28.0% IGST(28%)</option>             
-                            </optgroup>
+              <option value="0">0% GST(0%)</option>
+              <option value="3">3.0% GST(3%)</option>
+              <option value="5">5.0% GST(5%)</option>
+              <option value="12">12.0% GST(12%)</option>
+              <option value="18">18.0% GST(18%)</option>
+              <option value="28">28.0% GST(28%)</option>
+            </optgroup>
+            <optgroup  class="text-center" label="IGST">
+              
+              <option value="0">0% IGST(0%)</option>
+              <option value="3">3.0% IGST(3%)</option>
+              <option value="5">5.0% IGST(5%)</option>
+              <option value="12">12.0% IGST(12%)</option>
+              <option value="18">18.0% IGST(18%)</option>
+              <option value="28">28.0% IGST(28%)</option>             
+            </optgroup>
           </select>
         </td>
         
@@ -2911,10 +2958,18 @@ function calculateGrandTotal() {
       </tr>
     `;
   $('#item_table tbody').append(newRow);
+    const newItemSelect = $(`#item${rowCount}`);
+
+    // Get the selected bill number from the 'bill_number' dropdown
+    const selectedBillNumber = $('#bill_number').val();
+
+    // Call the populateItems function for the newly added row
+    populateItems(selectedBillNumber, newItemSelect);
     toggleDateInput();
     calculateSubtotal();
     calculateGrandTotal();
   });
+
   $('#item_table').on('click', '.delete-row', function () {
     $(this).closest('tr').remove();
     calculateSubtotal();
@@ -2973,6 +3028,13 @@ function calculateGrandTotal() {
     $('#shipping_charge').val(shippingAmount.toFixed(2));
     calculateGrandTotal();
   });
+
+  $('#adjustment').on('input', function () {
+    var adjustmentAmount = parseFloat($(this).val());5
+    $('#shipping_charge').val(adjustmentAmount.toFixed(2));
+    calculateGrandTotal();
+  });
+
 
 
 
@@ -3169,812 +3231,2408 @@ function toggleDateInput() {
   $(document).ready(function () {
 
 
-      var roinc = 0
-      console.log("ajax");
-      // Function to calculate the row amount
-      function calculateRowAmount(row) {
-        var qty = parseFloat(row.find('.qty').val());
-        var rate = parseFloat(row.find('.rate').val());
-        var tax = parseFloat(row.find('.tax').val());
-        var discount = parseFloat(row.find('.discount').val());
+    var roinc = 0
+    console.log("ajax");
+    // Function to calculate the row amount
+    function calculateRowAmount(row) {
+      var qty = parseFloat(row.find('.qty').val());
+      var rate = parseFloat(row.find('.rate').val());
+      var tax = parseFloat(row.find('.tax').val());
+      var discount = parseFloat(row.find('.discount').val());
 
-        var rowAmount = (qty * rate) - discount;
-        var taxAmount = (rowAmount * tax) / 100;
+      var rowAmount = (qty * rate) - discount;
+      var taxAmount = (rowAmount * tax) / 100;
 
-        row.find('.amount').val(rowAmount.toFixed(2));
-        row.find('.taxamount').val(taxAmount.toFixed(2));
-        
-        
-        return rowAmount;
-        calculateTaxAmount();
-      }
-
-      // Function to calculate the subtotal
-      function calculateSubtotal() {
-        var subtotal = 0;
-        $('#item_table tbody tr').each(function () {
-          subtotal += calculateRowAmount($(this));
-        });
-        $('#subtotal').val(subtotal.toFixed(2));
-      }
-
-      // Function to calculate the grand total
-      function calculateGrandTotal() {
-        var grandTotal = 0;
-        var totalTaxAmount = 0;
-
-        $('#item_table tbody tr').each(function () {
-          var rowAmount = calculateRowAmount($(this));
-          grandTotal += rowAmount;
-          var taxAmount = parseFloat($(this).find('.taxamount').val());
-          grandTotal += taxAmount;
-          totalTaxAmount += taxAmount;
-        });
-        var shippingCharges = parseFloat($('#shipping').val());
-        grandTotal += shippingCharges;
-
-        $('#grandtotal').val(grandTotal.toFixed(2));
-        $('#total_taxamount').val(totalTaxAmount.toFixed(2));
-      }
-
+      row.find('.amount').val(rowAmount.toFixed(2));
+      row.find('.taxamount').val(taxAmount.toFixed(2));
       
-      // var place = document.getElementById('pos').value;
+      
+      return rowAmount;
+      calculateTaxAmount();
+    }
 
-      $(document).on('click', '#item1', function () {
-          select = $('#item1').val();
-          billno= $('#bill_number').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                id: select,
-                cust: customer,
-                bill: billno
-
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4=response.place
-                  data5 = response.hsn
-                  data6 = response.qty
-                  data7 = response.dis
-                  data8 = response.amt
-                  data9 = response.tax
-
-                  document.getElementById('rate1').value = data
-                  document.getElementById('hsn1').value = data5
-                  document.getElementById('qty1').value = data6
-                  document.getElementById('discount1').value = data7
-                  // document.getElementById('amount1').value = data8
-
-                  var checkbox = document.getElementById("srcofsupply");
-                  var vale=checkbox.value;
-                  var company_state = document.getElementById("cstate");
-                  var com_state= company_state.value;
-                  const taxSelect = $('#tax1');
-
-                  taxSelect.append($('<option>', {
-                    value: response.tax,
-                    text: response.tax,
-                    hidden: 'hidden'
-                  }));
-
-                  // Set the selected option
-                  taxSelect.val(response.tax);
-                  // Bind the handleItemChange function to the change event for elements with the class .item_select
-                  
-                  var row = $(this).closest('tr');
-                  calculateRowAmount(row);
-                  calculateSubtotal();
-                  calculateGrandTotal();
-                  toggleDateInput();
-                  calculateTaxAmount();
-                  
-
-                  
-
-                  // if (data3 == '{{ company.state }}') {
-                  //     document.getElementById('tgst1').innerHTML = data1 + ' % GST';
-                  //     document.getElementById('tgst1').value = data1
-                  // }
-                  // document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
-                  // document.getElementById('tigst1').value = data2
-
-              }
-          });
-
+    // Function to calculate the subtotal
+    function calculateSubtotal() {
+      var subtotal = 0;
+      $('#item_table tbody tr').each(function () {
+        subtotal += calculateRowAmount($(this));
       });
-      // console.log('pos:'+place_of_supply);
-      $(document).on('click', '#item2', function () {
-          select = $('#item2').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('rate2').value = data
-                  document.getElementById('hsn2').value = data4
+      $('#subtotal').val(subtotal.toFixed(2));
+    }
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst2').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst2').value = data1
-                  }
-                  document.getElementById('tigst2').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst2').value = data2
+    // Function to calculate the grand total
+    function calculateGrandTotal() {
+      var grandTotal = 0;
+      var totalTaxAmount = 0;
 
-              }
-          });
+      $('#item_table tbody tr').each(function () {
+        var rowAmount = calculateRowAmount($(this));
+        grandTotal += rowAmount;
+        var taxAmount = parseFloat($(this).find('.taxamount').val());
+        grandTotal += taxAmount;
+        totalTaxAmount += taxAmount;
+      });
+      var shippingCharges = parseFloat($('#shipping').val());
+      grandTotal += shippingCharges;
+      var adjustments = parseFloat($('#adjustment').val());
+      grandTotal += adjustments;
 
+      $('#grandtotal').val(grandTotal.toFixed(2));
+      $('#total_taxamount').val(totalTaxAmount.toFixed(2));
+    }
+
+    
+    // var place = document.getElementById('pos').value;
+
+    $(document).on('click', '#item1', function () {
+      select = $('#item1').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate1').value = data
+          document.getElementById('hsn1').value = data5
+          document.getElementById('qty1').value = data6
+          document.getElementById('discount1').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty1').attr('min', 0);
+          $('#qty1').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax1');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item3', function () {
-          select = $('#item3').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('rate3').value = data
-                  document.getElementById('hsn3').value = data4
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst3').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst3').value = data1
-                  }
-                  document.getElementById('tigst3').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst3').value = data2
+    $(document).on('click', '#item2', function () {
+      select = $('#item2').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
-              }
-          });
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
 
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate2').value = data
+          document.getElementById('hsn2').value = data5
+          document.getElementById('qty2').value = data6
+          document.getElementById('discount2').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty2').attr('min', 0);
+          $('#qty2').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax2');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item4', function () {
-          select = $('#item4').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn4').value = data4
-                  document.getElementById('rate4').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst4').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst4').value = data1
-                  }
-                  document.getElementById('tigst4').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst4').value = data2
 
-              }
-          });
+    $(document).on('click', '#item3', function () {
+      select = $('#item3').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate3').value = data
+          document.getElementById('hsn3').value = data5
+          document.getElementById('qty3').value = data6
+          document.getElementById('discount3').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax3');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item5', function () {
-          select = $('#item5').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn5').value = data4
-                  document.getElementById('rate5').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst5').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst5').value = data1
-                  }
-                  document.getElementById('tigst5').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst5').value = data2
+    $(document).on('click', '#item4', function () {
+      select = $('#item4').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
-              }
-          });
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
 
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate4').value = data
+          document.getElementById('hsn4').value = data5
+          document.getElementById('qty4').value = data6
+          document.getElementById('discount4').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax4');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item6', function () {
-          select = $('#item6').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn6').value = data4
-                  document.getElementById('rate6').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst6').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst6').value = data1
-                  }
-                  document.getElementById('tigst6').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst6').value = data2
 
-              }
-          });
+    $(document).on('click', '#item5', function () {
+      select = $('#item5').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate5').value = data
+          document.getElementById('hsn5').value = data5
+          document.getElementById('qty5').value = data6
+          document.getElementById('discount5').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax5');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item7', function () {
-          select = $('#item7').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn7').value = data4
-                  document.getElementById('rate7').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst7').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst7').value = data1
-                  }
-                  document.getElementById('tigst7').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst7').value = data2
 
-              }
-          });
+    $(document).on('click', '#item6', function () {
+      select = $('#item6').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate6').value = data
+          document.getElementById('hsn6').value = data5
+          document.getElementById('qty6').value = data6
+          document.getElementById('discount6').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax6');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item8', function () {
-          select = $('#item8').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn8').value = data4
-                  document.getElementById('rate8').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst8').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst8').value = data1
-                  }
-                  document.getElementById('tigst8').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst8').value = data2
 
-              }
-          });
+    $(document).on('click', '#item7', function () {
+      select = $('#item7').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate7').value = data
+          document.getElementById('hsn7').value = data5
+          document.getElementById('qty7').value = data6
+          document.getElementById('discount7').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax7');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item9', function () {
-          select = $('#item9').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn9').value = data4
-                  document.getElementById('rate9').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst9').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst9').value = data1
-                  }
-                  document.getElementById('tigst9').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst9').value = data2
 
-              }
-          });
+    $(document).on('click', '#item8', function () {
+      select = $('#item8').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate8').value = data
+          document.getElementById('hsn8').value = data5
+          document.getElementById('qty8').value = data6
+          document.getElementById('discount8').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax8');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item10', function () {
-          select = $('#item10').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn10').value = data4
-                  document.getElementById('rate10').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst10').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst10').value = data1
-                  }
-                  document.getElementById('tigst10').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst10').value = data2
 
-              }
-          });
+    $(document).on('click', '#item9', function () {
+      select = $('#item9').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate9').value = data
+          document.getElementById('hsn9').value = data5
+          document.getElementById('qty9').value = data6
+          document.getElementById('discount9').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax9');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item11', function () {
-          select = $('#item11').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn11').value = data4
-                  document.getElementById('rate11').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst11').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst11').value = data1
-                  }
-                  document.getElementById('tigst11').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst11').value = data2
 
-              }
-          });
+    $(document).on('click', '#item10', function () {
+      select = $('#item10').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate10').value = data
+          document.getElementById('hsn10').value = data5
+          document.getElementById('qty10').value = data6
+          document.getElementById('discount10').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax10');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item12', function () {
-          select = $('#item12').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn12').value = data4
-                  document.getElementById('rate12').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst12').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst12').value = data1
-                  }
-                  document.getElementById('tigst12').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst12').value = data2
 
-              }
-          });
+    $(document).on('click', '#item11', function () {
+      select = $('#item11').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate11').value = data
+          document.getElementById('hsn11').value = data5
+          document.getElementById('qty11').value = data6
+          document.getElementById('discount11').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax11');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item13', function () {
-          select = $('#item13').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn13').value = data4
-                  document.getElementById('rate13').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst13').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst13').value = data1
-                  }
-                  document.getElementById('tigst13').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst13').value = data2
 
-              }
-          });
+    $(document).on('click', '#item12', function () {
+      select = $('#item12').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate12').value = data
+          document.getElementById('hsn12').value = data5
+          document.getElementById('qty12').value = data6
+          document.getElementById('discount12').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax12');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item14', function () {
-          select = $('#item14').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn14').value = data4
-                  document.getElementById('rate14').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst14').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst14').value = data1
-                  }
-                  document.getElementById('tigst14').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst14').value = data2
 
-              }
-          });
+    $(document).on('click', '#item13', function () {
+      select = $('#item13').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate13').value = data
+          document.getElementById('hsn13').value = data5
+          document.getElementById('qty13').value = data6
+          document.getElementById('discount13').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax13');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item15', function () {
-          select = $('#item15').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn15').value = data4
-                  document.getElementById('rate15').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst15').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst15').value = data1
-                  }
-                  document.getElementById('tigst15').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst15').value = data2
 
-              }
-          });
+    $(document).on('click', '#item14', function () {
+      select = $('#item14').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate14').value = data
+          document.getElementById('hsn14').value = data5
+          document.getElementById('qty14').value = data6
+          document.getElementById('discount14').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax14');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item16', function () {
-          select = $('#item16').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn16').value = data4
-                  document.getElementById('rate16').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst16').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst16').value = data1
-                  }
-                  document.getElementById('tigst16').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst16').value = data2
 
-              }
-          });
+    $(document).on('click', '#item15', function () {
+      select = $('#item15').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate15').value = data
+          document.getElementById('hsn15').value = data5
+          document.getElementById('qty15').value = data6
+          document.getElementById('discount15').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax15');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item17', function () {
-          select = $('#item17').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn17').value = data4
-                  document.getElementById('rate17').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst17').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst17').value = data1
-                  }
-                  document.getElementById('tigst17').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst17').value = data2
 
-              }
-          });
+    $(document).on('click', '#item16', function () {
+      select = $('#item16').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate16').value = data
+          document.getElementById('hsn16').value = data5
+          document.getElementById('qty16').value = data6
+          document.getElementById('discount16').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax16');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item18', function () {
-          select = $('#item18').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn18').value = data4
-                  document.getElementById('rate18').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst18').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst18').value = data1
-                  }
-                  document.getElementById('tigst18').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst18').value = data2
 
-              }
-          });
+    $(document).on('click', '#item17', function () {
+      select = $('#item17').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate17').value = data
+          document.getElementById('hsn17').value = data5
+          document.getElementById('qty17').value = data6
+          document.getElementById('discount17').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax17');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item19', function () {
-          select = $('#item19').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn19').value = data4
-                  document.getElementById('rate19').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst19').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst19').value = data1
-                  }
-                  document.getElementById('tigst19').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst19').value = data2
 
-              }
-          });
+    $(document).on('click', '#item18', function () {
+      select = $('#item18').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate18').value = data
+          document.getElementById('hsn18').value = data5
+          document.getElementById('qty18').value = data6
+          document.getElementById('discount18').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax18');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item20', function () {
-          select = $('#item20').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn20').value = data4
-                  document.getElementById('rate20').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst20').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst20').value = data1
-                  }
-                  document.getElementById('tigst20').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst20').value = data2
 
-              }
-          });
+    $(document).on('click', '#item19', function () {
+      select = $('#item19').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate19').value = data
+          document.getElementById('hsn19').value = data5
+          document.getElementById('qty19').value = data6
+          document.getElementById('discount19').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax19');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
 
-      $(document).on('click', '#item21', function () {
-          select = $('#item21').val();
-          customer = $('#customer_sel').val();
-          console.log(select);
-          console.log(customer);
-          $.ajax({
-              type: "GET",
-              url: "{% url 'itemdata_vendor_credit' %}",
-              data: {
-                  id: select,
-                  cust: customer
-              },
-              success: function (response) {
-                  console.log(response)
-                  data = response.rate
-                  data1 = response.gst
-                  data2 = response.igst
-                  data3 = response.pos
-                  data4 = response.hsn
-                  document.getElementById('hsn21').value = data4
-                  document.getElementById('rate21').value = data
+    });
 
-                  if (data3 == '{{ company.state }}') {
-                      document.getElementById('tgst21').innerHTML = data1 + ' % GST';
-                      document.getElementById('tgst21').value = data1
-                  }
-                  document.getElementById('tigst21').innerHTML = data2 + ' % IGST';
-                  document.getElementById('tigst21').value = data2
 
-              }
-          });
+    $(document).on('click', '#item20', function () {
+      select = $('#item20').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
 
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate20').value = data
+          document.getElementById('hsn20').value = data5
+          document.getElementById('qty20').value = data6
+          document.getElementById('discount20').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax20');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
       });
+
+    });
+
+    $(document).on('click', '#item21', function () {
+      select = $('#item21').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate21').value = data
+          document.getElementById('hsn21').value = data5
+          document.getElementById('qty21').value = data6
+          document.getElementById('discount21').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax21');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item22', function () {
+      select = $('#item22').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate22').value = data
+          document.getElementById('hsn22').value = data5
+          document.getElementById('qty22').value = data6
+          document.getElementById('discount22').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax22');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item23', function () {
+      select = $('#item23').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate23').value = data
+          document.getElementById('hsn23').value = data5
+          document.getElementById('qty23').value = data6
+          document.getElementById('discount23').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax23');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item24', function () {
+      select = $('#item24').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate24').value = data
+          document.getElementById('hsn24').value = data5
+          document.getElementById('qty24').value = data6
+          document.getElementById('discount24').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax24');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item25', function () {
+      select = $('#item25').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate25').value = data
+          document.getElementById('hsn25').value = data5
+          document.getElementById('qty25').value = data6
+          document.getElementById('discount25').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax25');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item26', function () {
+      select = $('#item26').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate26').value = data
+          document.getElementById('hsn26').value = data5
+          document.getElementById('qty26').value = data6
+          document.getElementById('discount26').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax26');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item27', function () {
+      select = $('#item27').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate27').value = data
+          document.getElementById('hsn27').value = data5
+          document.getElementById('qty27').value = data6
+          document.getElementById('discount27').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax27');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item28', function () {
+      select = $('#item28').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate28').value = data
+          document.getElementById('hsn28').value = data5
+          document.getElementById('qty28').value = data6
+          document.getElementById('discount28').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax28');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item29', function () {
+      select = $('#item29').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate29').value = data
+          document.getElementById('hsn29').value = data5
+          document.getElementById('qty29').value = data6
+          document.getElementById('discount29').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax29');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item30', function () {
+      select = $('#item30').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate30').value = data
+          document.getElementById('hsn30').value = data5
+          document.getElementById('qty30').value = data6
+          document.getElementById('discount30').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax30');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+    $(document).on('click', '#item31', function () {
+      select = $('#item31').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate31').value = data
+          document.getElementById('hsn31').value = data5
+          document.getElementById('qty31').value = data6
+          document.getElementById('discount31').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax31');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+    $(document).on('click', '#item32', function () {
+      select = $('#item32').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate32').value = data
+          document.getElementById('hsn32').value = data5
+          document.getElementById('qty32').value = data6
+          document.getElementById('discount32').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax32');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+    $(document).on('click', '#item33', function () {
+      select = $('#item33').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate33').value = data
+          document.getElementById('hsn33').value = data5
+          document.getElementById('qty33').value = data6
+          document.getElementById('discount33').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax33');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item34', function () {
+      select = $('#item34').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate34').value = data
+          document.getElementById('hsn34').value = data5
+          document.getElementById('qty34').value = data6
+          document.getElementById('discount34').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax34');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item35', function () {
+      select = $('#item35').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate35').value = data
+          document.getElementById('hsn35').value = data5
+          document.getElementById('qty35').value = data6
+          document.getElementById('discount35').value = data7
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax35');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+
+
+
+
+
+
 
 
   });
+</script>
+
+
+<!-- item quantity error section -->
+
+<script>
+$(document).ready(function () {
+    // Function to fetch and populate item details based on item selection
+    function populateItemDetails(selectedItem, rowId) {
+        // Make an AJAX request to fetch item details for the selected item
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'get_item_details' %}",  // URL for fetching item details
+            data: {
+                'item': selectedItem
+            },
+            success: function (data) {
+                // Populate details in the corresponding row
+                $(`#hsn${rowId}`).val(data.hsn);
+                $(`#qty${rowId}`).val(data.quantity);
+                $(`#rate${rowId}`).val(data.rate);
+                $(`#tax${rowId}`).val(data.tax);
+
+                // Update the max attribute of the quantity input based on the fetched quantity limit
+                $(`#qty${rowId}`).attr('max', data.quantity_limit);
+            }
+        });
+    }
+
+    // Add an event listener for the change event on item select elements
+    $('#item_table tbody').on('change', 'select.item_select', function () {
+        // Get the selected item and the corresponding row ID
+        const selectedItem = $(this).val();
+        const rowId = $(this).closest('tr').attr('id').replace('row', '');
+
+        // Call the populateItemDetails function for the selected item and row
+        populateItemDetails(selectedItem, rowId);
+    });
+
+    // Add an event listener for the input event on quantity inputs in the item table
+    $('#item_table tbody').on('input', 'input.qty', function () {
+        // Get the current quantity value
+        const currentQty = parseFloat($(this).val());
+
+        // Get the corresponding row ID
+        const rowId = $(this).closest('tr').attr('id').replace('row', '');
+
+        // Get the displayed quantity value from the item details
+        const displayedQty = parseFloat($(`#qty${rowId}`).val());
+
+        // Get the maximum allowed quantity
+        const maxAllowedQty = parseFloat($(this).attr('max'));
+
+        // Check if the current quantity exceeds the maximum allowed quantity
+        if (currentQty > maxAllowedQty) {
+            // Display an error message
+            alert(`Error: Entered quantity cannot exceed ${maxAllowedQty}`);
+            // Optionally, reset the quantity to the maximum allowed value
+            $(this).val(maxAllowedQty);
+        }
+    });
+});
+
 </script>
 
 
