@@ -106,7 +106,7 @@
   </div>
   <div>
   <div class="card radius-15 p-5 border-3 rounded">
-    <form action="{% url 'create_vendor_credit' %}" class="mt-2 mb-4" method="post" enctype="multipart/form-data">
+    <form action="" id="forms" class="mt-2 mb-4" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="row">
         <div class="col-md-3">
@@ -299,7 +299,7 @@
                   </td>
                   <td style="width: 12%;" class='text-right '> 
                     <select name='tax[]' id='tax1'class='form-control bg-light text-dark  text-right border-0 tax' onclick="toggleDateInput()">
-                      <option value=""hidden>select</option>
+                      <option value=""hidden>Select</option>
                       <optgroup class="text-center" label="GST">
                           
                         <option value="0">0% GST(0%)</option>
@@ -382,18 +382,18 @@
             <tr>
                 <td>Shipping Charges</td>
                 
-                <td><input type="hidden" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
+                <td><input type="hidden" id="shipping_charge" step="any" value="0.00" 
                     class="form-control bg-transparent border-0 shipping_charge  ">
                 </td>
-                <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="shipping" value="0.00"> </td>
+                <td><input type="number" name="shipping_charge" class="form-control  bg-transparent border-0  text-light" id="shipping" value="0.00"> </td>
             </tr>
             <tr>
-              <td>Adjustment </td>
+              <td>Adjustment </td> 
               
-              <td><input type="hidden" id="adjustment_amount" name="shipping_charge" step="any" value="0.00" 
+              <td><input type="hidden" id="adjustment_amount" name="" step="any" value="0.00" 
                   class="form-control bg-transparent border-0">
               </td>
-              <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="adjustment" name="adjustment" step="any" value="0.00"> </td>
+              <td><input type="number" class="form-control  bg-transparent border-0  text-light" id="adjustment" name="adjustment_amount" step="any" value="0.00"> </td>
             </tr>
             
             <tr>
@@ -420,8 +420,8 @@
       <div class="row mt-5 mb-3 ">
 
         <div class="d-grid gap-5 d-md-block">
-          <button class="btn btn1 btn-warning" type="button" style="width: 100px;">Save</button>
-          <button class="btn btn1 btn-warning" type="button" style="width: 100px;">Draft</button>
+          <button class="btn btn1 btn-warning" type="button" style="width: 100px;"  onclick="Save()">Save</button>
+          <button class="btn btn1 btn-warning" type="button" style="width: 100px;"  onclick="Draft()">Draft</button>
           <button class="btn btn1 btn-warning" type="reset"  style="width: 100px;">Cancel</button>
         </div>
        
@@ -3455,6 +3455,10 @@ function toggleDateInput() {
           document.getElementById('qty3').value = data6
           document.getElementById('discount3').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty3').attr('min', 0);
+          $('#qty3').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -3518,6 +3522,10 @@ function toggleDateInput() {
           document.getElementById('hsn4').value = data5
           document.getElementById('qty4').value = data6
           document.getElementById('discount4').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty4').attr('min', 0);
+          $('#qty4').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -3584,6 +3592,10 @@ function toggleDateInput() {
           document.getElementById('qty5').value = data6
           document.getElementById('discount5').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty5').attr('min', 0);
+          $('#qty5').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -3648,6 +3660,10 @@ function toggleDateInput() {
           document.getElementById('hsn6').value = data5
           document.getElementById('qty6').value = data6
           document.getElementById('discount6').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty6').attr('min', 0);
+          $('#qty6').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -3714,6 +3730,10 @@ function toggleDateInput() {
           document.getElementById('qty7').value = data6
           document.getElementById('discount7').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty7').attr('min', 0);
+          $('#qty7').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -3778,6 +3798,10 @@ function toggleDateInput() {
           document.getElementById('hsn8').value = data5
           document.getElementById('qty8').value = data6
           document.getElementById('discount8').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty8').attr('min', 0);
+          $('#qty8').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -3844,6 +3868,10 @@ function toggleDateInput() {
           document.getElementById('qty9').value = data6
           document.getElementById('discount9').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty9').attr('min', 0);
+          $('#qty9').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -3908,6 +3936,10 @@ function toggleDateInput() {
           document.getElementById('hsn10').value = data5
           document.getElementById('qty10').value = data6
           document.getElementById('discount10').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty10').attr('min', 0);
+          $('#qty10').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -3974,6 +4006,10 @@ function toggleDateInput() {
           document.getElementById('qty11').value = data6
           document.getElementById('discount11').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty11').attr('min', 0);
+          $('#qty11').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4038,6 +4074,10 @@ function toggleDateInput() {
           document.getElementById('hsn12').value = data5
           document.getElementById('qty12').value = data6
           document.getElementById('discount12').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty12').attr('min', 0);
+          $('#qty12').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4104,6 +4144,10 @@ function toggleDateInput() {
           document.getElementById('qty13').value = data6
           document.getElementById('discount13').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty13').attr('min', 0);
+          $('#qty13').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4168,6 +4212,10 @@ function toggleDateInput() {
           document.getElementById('hsn14').value = data5
           document.getElementById('qty14').value = data6
           document.getElementById('discount14').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty14').attr('min', 0);
+          $('#qty14').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4234,6 +4282,10 @@ function toggleDateInput() {
           document.getElementById('qty15').value = data6
           document.getElementById('discount15').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty15').attr('min', 0);
+          $('#qty15').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4298,6 +4350,10 @@ function toggleDateInput() {
           document.getElementById('hsn16').value = data5
           document.getElementById('qty16').value = data6
           document.getElementById('discount16').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty16').attr('min', 0);
+          $('#qty16').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4364,6 +4420,10 @@ function toggleDateInput() {
           document.getElementById('qty17').value = data6
           document.getElementById('discount17').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty17').attr('min', 0);
+          $('#qty17').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4428,6 +4488,10 @@ function toggleDateInput() {
           document.getElementById('hsn18').value = data5
           document.getElementById('qty18').value = data6
           document.getElementById('discount18').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty18').attr('min', 0);
+          $('#qty18').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4494,6 +4558,10 @@ function toggleDateInput() {
           document.getElementById('qty19').value = data6
           document.getElementById('discount19').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty19').attr('min', 0);
+          $('#qty19').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4559,6 +4627,10 @@ function toggleDateInput() {
           document.getElementById('qty20').value = data6
           document.getElementById('discount20').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty20').attr('min', 0);
+          $('#qty20').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4622,6 +4694,10 @@ function toggleDateInput() {
           document.getElementById('hsn21').value = data5
           document.getElementById('qty21').value = data6
           document.getElementById('discount21').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty21').attr('min', 0);
+          $('#qty21').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4688,6 +4764,10 @@ function toggleDateInput() {
           document.getElementById('qty22').value = data6
           document.getElementById('discount22').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty22').attr('min', 0);
+          $('#qty22').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4752,6 +4832,10 @@ function toggleDateInput() {
           document.getElementById('hsn23').value = data5
           document.getElementById('qty23').value = data6
           document.getElementById('discount23').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty23').attr('min', 0);
+          $('#qty23').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4818,6 +4902,10 @@ function toggleDateInput() {
           document.getElementById('qty24').value = data6
           document.getElementById('discount24').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty24').attr('min', 0);
+          $('#qty24').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -4882,6 +4970,10 @@ function toggleDateInput() {
           document.getElementById('hsn25').value = data5
           document.getElementById('qty25').value = data6
           document.getElementById('discount25').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty25').attr('min', 0);
+          $('#qty25').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -4948,6 +5040,10 @@ function toggleDateInput() {
           document.getElementById('qty26').value = data6
           document.getElementById('discount26').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty26').attr('min', 0);
+          $('#qty26').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5012,6 +5108,10 @@ function toggleDateInput() {
           document.getElementById('hsn27').value = data5
           document.getElementById('qty27').value = data6
           document.getElementById('discount27').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty27').attr('min', 0);
+          $('#qty27').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -5078,6 +5178,10 @@ function toggleDateInput() {
           document.getElementById('qty28').value = data6
           document.getElementById('discount28').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty28').attr('min', 0);
+          $('#qty28').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5142,6 +5246,10 @@ function toggleDateInput() {
           document.getElementById('hsn29').value = data5
           document.getElementById('qty29').value = data6
           document.getElementById('discount29').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty29').attr('min', 0);
+          $('#qty29').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -5208,6 +5316,10 @@ function toggleDateInput() {
           document.getElementById('qty30').value = data6
           document.getElementById('discount30').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty30').attr('min', 0);
+          $('#qty30').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5271,6 +5383,10 @@ function toggleDateInput() {
           document.getElementById('hsn31').value = data5
           document.getElementById('qty31').value = data6
           document.getElementById('discount31').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty31').attr('min', 0);
+          $('#qty31').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -5336,6 +5452,10 @@ function toggleDateInput() {
           document.getElementById('qty32').value = data6
           document.getElementById('discount32').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty32').attr('min', 0);
+          $('#qty32').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5399,6 +5519,10 @@ function toggleDateInput() {
           document.getElementById('hsn33').value = data5
           document.getElementById('qty33').value = data6
           document.getElementById('discount33').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty33').attr('min', 0);
+          $('#qty33').attr('max', data6);
 
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
@@ -5465,6 +5589,10 @@ function toggleDateInput() {
           document.getElementById('qty34').value = data6
           document.getElementById('discount34').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty34').attr('min', 0);
+          $('#qty34').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5530,6 +5658,10 @@ function toggleDateInput() {
           document.getElementById('qty35').value = data6
           document.getElementById('discount35').value = data7
 
+          // Set the min and max attributes for the quantity input box
+          $('#qty35').attr('min', 0);
+          $('#qty35').attr('max', data6);
+
           var checkbox = document.getElementById("srcofsupply");
           var vale=checkbox.value;
           var company_state = document.getElementById("cstate");
@@ -5560,14 +5692,349 @@ function toggleDateInput() {
 
     });
 
+    $(document).on('click', '#item36', function () {
+      select = $('#item36').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate36').value = data
+          document.getElementById('hsn36').value = data5
+          document.getElementById('qty36').value = data6
+          document.getElementById('discount36').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty36').attr('min', 0);
+          $('#qty36').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax36');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
 
 
+        }
+      });
+
+    });
 
 
+    $(document).on('click', '#item37', function () {
+      select = $('#item37').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate37').value = data
+          document.getElementById('hsn37').value = data5
+          document.getElementById('qty37').value = data6
+          document.getElementById('discount37').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty37').attr('min', 0);
+          $('#qty37').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax37');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
 
 
+        }
+      });
+
+    });
 
 
+    $(document).on('click', '#item38', function () {
+      select = $('#item38').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate38').value = data
+          document.getElementById('hsn38').value = data5
+          document.getElementById('qty38').value = data6
+          document.getElementById('discount38').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty38').attr('min', 0);
+          $('#qty38').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax38');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item39', function () {
+      select = $('#item39').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate39').value = data
+          document.getElementById('hsn39').value = data5
+          document.getElementById('qty39').value = data6
+          document.getElementById('discount39').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty39').attr('min', 0);
+          $('#qty39').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax39');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
+
+
+    $(document).on('click', '#item40', function () {
+      select = $('#item40').val();
+      billno= $('#bill_number').val();
+      customer = $('#customer_sel').val();
+      console.log(select);
+      console.log(customer);
+      $.ajax({
+        type: "GET",
+        url: "{% url 'itemdata_vendor_credit' %}",
+        data: {
+          id: select,
+          cust: customer,
+          bill: billno
+
+        },
+        success: function (response) {
+          console.log(response)
+          data = response.rate
+
+          data1 = response.gst
+          data2 = response.igst
+          data3 = response.pos
+          data4=response.place
+          data5 = response.hsn
+          data6 = response.qty
+          data7 = response.dis
+          data8 = response.amt
+          data9 = response.tax
+
+          document.getElementById('rate40').value = data
+          document.getElementById('hsn40').value = data5
+          document.getElementById('qty40').value = data6
+          document.getElementById('discount40').value = data7
+
+          // Set the min and max attributes for the quantity input box
+          $('#qty40').attr('min', 0);
+          $('#qty40').attr('max', data6);
+
+          var checkbox = document.getElementById("srcofsupply");
+          var vale=checkbox.value;
+          var company_state = document.getElementById("cstate");
+          var com_state= company_state.value;
+          const taxSelect = $('#tax40');
+
+          taxSelect.append($('<option>', {
+            value: response.tax,
+            text: response.tax,
+            hidden: 'hidden'
+          }));
+
+          // Set the selected option
+          taxSelect.val(response.tax);
+          // Bind the handleItemChange function to the change event for elements with the class .item_select
+          
+          var row = $(this).closest('tr');
+          calculateRowAmount(row);
+          calculateSubtotal();
+          calculateGrandTotal();
+          toggleDateInput();
+          calculateTaxAmount();
+            
+
+
+        }
+      });
+
+    });
 
   });
 </script>
@@ -5632,6 +6099,22 @@ $(document).ready(function () {
         }
     });
 });
+
+</script>
+
+
+<script>
+
+  function Draft() { 
+    var frm = document.getElementById("forms");
+    frm.action = ("{% url 'create_vendor_credit' %}")
+    
+  }
+
+  function Save() {
+    var frm = document.getElementById("forms");
+    frm.action = ("{% url 'create_vendor_credit' %}") 
+  }
 
 </script>
 

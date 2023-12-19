@@ -13635,8 +13635,8 @@ def create_vendor_credit(request):
         cgst=request.POST['cgst']
         igst=request.POST['igst']
         tax = request.POST['total_taxamount']
-        adjustment= request.POST['shipping_charge']
-        # adjustment=request.POST['adjustment_charge']
+        shipping= request.POST['shipping_charge']
+        adjustment=request.POST['adjustment_amount']
         grand_total=request.POST['grandtotal']
         note=request.POST['customer_note']
       
@@ -13646,30 +13646,29 @@ def create_vendor_credit(request):
         if typ=='Organization':
            
 
-            purchase = Vendor_Credits_Bills(vendor_name=vname,
-                                    vendor_email=vmail,
-                                    gst_treatment=vgst_t,
-                                    gst_number=vgst_n,
-                                    address=vaddress,
-                                        
-                                    vendor_date=vendor_date,
-                                    order_no=order_no,
-                                    credit_note=credit_note,
-                             
-                                    source_supply=src_supply,
-                                      
-                                    sub_total=sub_total,
-                                    sgst=sgst,
-                                    cgst=cgst,
-                                    igst=igst,
-                                    tax_amount=tax,
-                                     
-                                    adjustment=adjustment,
-                                    grand_total=grand_total,
-                                    note=note,
-                                   
-                                    company=company,
-                                    user = u )
+            purchase = Vendor_Credits_Bills(
+                vendor_name=vname,
+                vendor_email=vmail,
+                gst_treatment=vgst_t,
+                gst_number=vgst_n,
+                address=vaddress,    
+                vendor_date=vendor_date,
+                order_no=order_no,
+                credit_note=credit_note,
+                source_supply=src_supply,  
+                sub_total=sub_total,
+                sgst=sgst,
+                cgst=cgst,
+                igst=igst,
+                tax_amount=tax,
+                shipping_charge=shipping,
+                adjustment=adjustment,
+                grand_total=grand_total,
+                note=note,
+                status="save",
+                company=company,
+                user = u 
+            )
             purchase.save()
 
             p_bill = Vendor_Credits_Bills.objects.get(id=purchase.id)
@@ -13679,30 +13678,30 @@ def create_vendor_credit(request):
                 p_bill.save()
                 print('save')
         else:
-            purchase = Vendor_Credits_Bills(vendor_name=vname,
-                                    vendor_email=vmail,
-                                    gst_treatment=vgst_t,
-                                    gst_number=vgst_n,
-                                    address=vaddress,
-                                        
-                                    vendor_date=vendor_date,
-                                    order_no=order_no,
-                                    credit_note=credit_note,
-                              
-                                    source_supply=src_supply,
-                                  
-                                    sub_total=sub_total,
-                                    sgst=sgst,
-                                    cgst=cgst,
-                                    igst=igst,
-                                    tax_amount=tax,
-                                    
-                                    adjustment=adjustment,
-                                    grand_total=grand_total,
-                                    note=note,
-                                        # term=terms_con,
-                                    company=company,
-                                    user = u)
+            purchase = Vendor_Credits_Bills(
+                vendor_name=vname,
+                vendor_email=vmail,
+                gst_treatment=vgst_t,
+                gst_number=vgst_n,
+                address=vaddress,   
+                vendor_date=vendor_date,
+                order_no=order_no,
+                credit_note=credit_note,
+                source_supply=src_supply,
+                sub_total=sub_total,
+                sgst=sgst,
+                cgst=cgst,
+                igst=igst,
+                tax_amount=tax,
+                shipping_charge=shipping,
+                adjustment=adjustment,
+                grand_total=grand_total,
+                note=note,
+                status="save",
+                # term=terms_con,
+                company=company,
+                user = u
+            )
             purchase.save()
 
             p_bill = Vendor_Credits_Bills.objects.get(id=purchase.id)
@@ -13713,19 +13712,16 @@ def create_vendor_credit(request):
                 p_bill.save()
                 print('save')
             item = request.POST.getlist("item[]")
-            accounts = request.POST.getlist("account[]")
             hsn = request.POST.getlist("hsn[]")
             quantity = request.POST.getlist("quantity[]")
             rate = request.POST.getlist("rate[]")
             tax = request.POST.getlist("tax[]")
             discount = request.POST.getlist("discount[]")
             amount = request.POST.getlist("amount[]")
-            if len(item) == len(accounts) == len(hsn) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
+            if len(item) == len(hsn) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
                 for i in range(len(item)):
                     created = Vendor_Credits_Bills_items_bills.objects.create(
                         item=item[i],
-                        account=accounts[i],
-                        
                         hsn=hsn[i],
                         quantity=quantity[i],
                         rate=rate[i],
@@ -13740,6 +13736,132 @@ def create_vendor_credit(request):
 
         return redirect('vendor_credits_home')
     return render(request,'create_vendor_credits.html')
+
+@login_required(login_url='login')
+def create_vendor_credit1(request):
+
+    company = company_details.objects.get(user = request.user)
+    if request.method == 'POST':
+        typ=request.POST.get('option')
+        vname = request.POST.get('vendor')
+        vmail = request.POST.get('email_inp')
+        vgst_t = request.POST.get('gst_trt_inp')
+        vgst_n = request.POST.get('gstin_inp')
+        vaddress = request.POST.get('address_inp')
+        
+        credit_note = request.POST.get('credit_note')
+        order_no = request.POST.get('order_number')
+        vendor_date = request.POST.get('credit_date')
+
+        src_supply = request.POST.get('srcofsupply')
+     
+        sub_total =request.POST['subtotal']
+        sgst=request.POST['sgst']
+        cgst=request.POST['cgst']
+        igst=request.POST['igst']
+        tax = request.POST['total_taxamount']
+        shipping= request.POST['shipping_charge']
+        adjustment=request.POST['adjustment_amount']
+        grand_total=request.POST['grandtotal']
+        note=request.POST['customer_note']
+      
+        u = User.objects.get(id = request.user.id)
+        print('yes')
+        print(typ)
+        if typ=='Organization':
+           
+
+            purchase = Vendor_Credits_Bills(
+                vendor_name=vname,
+                vendor_email=vmail,
+                gst_treatment=vgst_t,
+                gst_number=vgst_n,
+                address=vaddress,    
+                vendor_date=vendor_date,
+                order_no=order_no,
+                credit_note=credit_note,
+                source_supply=src_supply,  
+                sub_total=sub_total,
+                sgst=sgst,
+                cgst=cgst,
+                igst=igst,
+                tax_amount=tax,
+                shipping_charge=shipping,
+                adjustment=adjustment,
+                grand_total=grand_total,
+                note=note,
+                status="draft",
+                company=company,
+                user = u 
+            )
+            purchase.save()
+
+            p_bill = Vendor_Credits_Bills.objects.get(id=purchase.id)
+
+            if len(request.FILES) != 0:
+                p_bill.document=request.FILES['file'] 
+                p_bill.save()
+                print('save')
+        else:
+            purchase = Vendor_Credits_Bills(
+                vendor_name=vname,
+                vendor_email=vmail,
+                gst_treatment=vgst_t,
+                gst_number=vgst_n,
+                address=vaddress,   
+                vendor_date=vendor_date,
+                order_no=order_no,
+                credit_note=credit_note,
+                source_supply=src_supply,
+                sub_total=sub_total,
+                sgst=sgst,
+                cgst=cgst,
+                igst=igst,
+                tax_amount=tax,
+                shipping_charge=shipping,
+                adjustment=adjustment,
+                grand_total=grand_total,
+                note=note,
+                status="draft",
+                # term=terms_con,
+                company=company,
+                user = u
+            )
+            purchase.save()
+
+            p_bill = Vendor_Credits_Bills.objects.get(id=purchase.id)
+
+        
+            if len(request.FILES) != 0:
+                p_bill.document=request.FILES['file'] 
+                p_bill.save()
+                print('save')
+            item = request.POST.getlist("item[]")
+            hsn = request.POST.getlist("hsn[]")
+            quantity = request.POST.getlist("quantity[]")
+            rate = request.POST.getlist("rate[]")
+            tax = request.POST.getlist("tax[]")
+            discount = request.POST.getlist("discount[]")
+            amount = request.POST.getlist("amount[]")
+            if len(item) == len(hsn) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
+                for i in range(len(item)):
+                    created = Vendor_Credits_Bills_items_bills.objects.create(
+                        item=item[i],
+                        hsn=hsn[i],
+                        quantity=quantity[i],
+                        rate=rate[i],
+                        tax=tax[i],
+                        discount=discount[i],
+                        amount=amount[i],
+                        user=u,
+                        company=company,
+                        recur_bills=p_bill
+                    )
+                print('Done')
+
+        return redirect('vendor_credits_home')
+    return render(request,'create_vendor_credits.html')
+
     
     
 def change_vendor_credits(request,id):

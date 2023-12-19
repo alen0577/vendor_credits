@@ -394,7 +394,8 @@ urlpatterns = [
     path('show_hide',views.show_hide,name='show_hide'),
     path('general',views.general,name='general'),
     #Abin - Vendor Credits
-    path('create_vendor_credit',views.create_vendor_credit,name='create_vendor_credit'),
+    path('create_vendor_credit_save',views.create_vendor_credit,name='create_vendor_credit'),
+    path('create_vendor_credit_draft',views.create_vendor_credit1,name='create_vendor_credit1'),
     path('vendor_credits_home',views.vendor_credits_home,name='vendor_credits_home'), 
     path('vendor_credits',views.vendor_credits,name='vendor_credits'),
     path('getitems2',views.getitems2,name='getitems2'),

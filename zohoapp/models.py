@@ -1174,6 +1174,7 @@ class Vendor_Credits_Bills(models.Model):
     cgst = models.FloatField(null=True,blank=True)
     sgst = models.FloatField(null=True,blank=True)
     tax_amount =  models.FloatField(null=True,blank=True)
+    shipping_charge = models.FloatField(null=True,blank=True)
     adjustment = models.FloatField(null=True,blank=True)
     grand_total = models.FloatField(null=True,blank=True)
     note = models.CharField(max_length=255,null=True,blank=True)
